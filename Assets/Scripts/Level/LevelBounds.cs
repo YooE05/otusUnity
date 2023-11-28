@@ -25,5 +25,16 @@ namespace ShootEmUp
                    && positionY > this.downBorder.position.y
                    && positionY < this.topBorder.position.y;
         }
+
+        public bool IsFreeByRight(Vector2 position)
+        {
+            var positionX = position.x;
+            return positionX < this.rightBorder.position.x;
+        }
+        public bool IsFreeByLeft(Vector2 position)
+        {
+            var positionX = position.x;
+            return positionX > this.leftBorder.position.x;
+        }
     }
 }

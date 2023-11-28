@@ -10,12 +10,12 @@ namespace ShootEmUp
         [SerializeField]
         private Transform[] attackPositions;
 
-        public Transform RandomSpawnPosition()
+        public Transform GetRandSpawnPos()
         {
             return this.RandomTransform(this.spawnPositions);
         }
 
-        public Transform RandomAttackPosition()
+        public Transform GetRandAtkPos()
         {
             return this.RandomTransform(this.attackPositions);
         }

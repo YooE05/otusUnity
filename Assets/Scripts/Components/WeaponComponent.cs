@@ -16,5 +16,14 @@ namespace ShootEmUp
 
         [SerializeField]
         private Transform firePoint;
+
+
+        public BulletConfig Config
+        {
+            get { return this.bulletConfig; }
+        }
+
+        [SerializeField]
+        private BulletConfig bulletConfig;
     }
 }

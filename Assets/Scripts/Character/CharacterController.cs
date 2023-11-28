@@ -1,48 +1,61 @@
 using UnityEngine;
+using System;
 
 namespace ShootEmUp
 {
     public sealed class CharacterController : MonoBehaviour
     {
-        [SerializeField] private GameObject character; 
-        [SerializeField] private GameManager gameManager;
-        [SerializeField] private BulletSystem _bulletSystem;
-        [SerializeField] private BulletConfig _bulletConfig;
-        
-        public bool _fireRequired;
+        public Action OnPlayerDied;
+
+
+        [SerializeField]
+        private GameObject character;
+        [SerializeField]
+        private BulletSystem bulletSystem;
+        [SerializeField]
+        private InputManager inputManager;
+
+
+        private PlayerMovement playerMovement;
+        private WeaponComponent characterWeapon;
+        private HitPointsComponent characterHP;
+
+        private void Awake()
+        {
+            this.characterHP = this.character.GetComponent<HitPointsComponent>();
+            this.characterWeapon = this.character.GetComponent<WeaponComponent>();
+
+            this.playerMovement = new PlayerMovement(this.character.GetComponent<MoveComponent>(), FindObjectOfType<LevelBounds>());
+        }
 
         private void OnEnable()
         {
-            this.character.GetComponent<HitPointsComponent>().hpEmpty += this.OnCharacterDeath;
+            this.characterHP.OnHpIsEmpty += this.OnCharacterDeath;
+            this.inputManager.OnFireButtonPressed += Shoot;
         }
 
         private void OnDisable()
         {
-            this.character.GetComponent<HitPointsComponent>().hpEmpty -= this.OnCharacterDeath;
+            this.characterHP.OnHpIsEmpty -= this.OnCharacterDeath;
+            this.inputManager.OnFireButtonPressed -= Shoot;
         }
 
-        private void OnCharacterDeath(GameObject _) => this.gameManager.FinishGame();
+        private void OnCharacterDeath(GameObject _) => OnPlayerDied?.Invoke();
 
         private void FixedUpdate()
         {
-            if (this._fireRequired)
-            {
-                this.OnFlyBullet();
-                this._fireRequired = false;
-            }
+            playerMovement.MoveCharacter(character.transform.position, inputManager.horizontalDirection, Time.fixedDeltaTime);
         }
 
-        private void OnFlyBullet()
+        private void Shoot()
         {
-            var weapon = this.character.GetComponent<WeaponComponent>();
-            _bulletSystem.FlyBulletByArgs(new BulletSystem.Args
+            this.bulletSystem.FlyBulletByArgs(new BulletArgs
             {
-                isPlayer = true,
-                physicsLayer = (int) this._bulletConfig.physicsLayer,
-                color = this._bulletConfig.color,
-                damage = this._bulletConfig.damage,
-                position = weapon.Position,
-                velocity = weapon.Rotation * Vector3.up * this._bulletConfig.speed
+                physicsLayer = (int)characterWeapon.Config.physicsLayer,
+                color = characterWeapon.Config.color,
+                damage = characterWeapon.Config.damage,
+                position = characterWeapon.Position,
+                velocity = characterWeapon.Rotation * Vector3.up * characterWeapon.Config.speed
             });
         }
     }

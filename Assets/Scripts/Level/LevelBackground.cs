@@ -11,55 +11,61 @@ namespace ShootEmUp
 
         private float movingSpeedY;
 
-        private float positionX;
+        private Vector2 position;
 
-        private float positionZ;
-
-        private Transform myTransform;
+        private Transform backTransform;
 
         [SerializeField]
-        private Params m_params;
+        private BackgorundParams backParams;
 
         private void Awake()
         {
-            this.startPositionY = this.m_params.m_startPositionY;
-            this.endPositionY = this.m_params.m_endPositionY;
-            this.movingSpeedY = this.m_params.m_movingSpeedY;
-            this.myTransform = this.transform;
-            var position = this.myTransform.position;
-            this.positionX = position.x;
-            this.positionZ = position.z;
+            SetUpBackMove();
+        }
+
+        private void SetUpBackMove()
+        {
+            this.startPositionY = this.backParams.startPosY;
+            this.endPositionY = this.backParams.endPosY;
+            this.movingSpeedY = this.backParams.movingSpeedY;
+            this.backTransform = this.transform;
+            this.position = new Vector2(this.backTransform.position.x, this.backTransform.position.z);
         }
 
         private void FixedUpdate()
         {
-            if (this.myTransform.position.y <= this.endPositionY)
+            MoveBackground();
+        }
+
+        private void MoveBackground()
+        {
+            if (this.backTransform.position.y <= this.endPositionY)
             {
-                this.myTransform.position = new Vector3(
-                    this.positionX,
+                this.backTransform.position = new Vector3(
+                    this.position.x,
                     this.startPositionY,
-                    this.positionZ
+                    this.position.y
                 );
             }
 
-            this.myTransform.position -= new Vector3(
-                this.positionX,
+            this.backTransform.position -= new Vector3(
+                this.position.x,
                 this.movingSpeedY * Time.fixedDeltaTime,
-                this.positionZ
+                this.position.y
             );
         }
 
         [Serializable]
-        public sealed class Params
+        public sealed class BackgorundParams
         {
             [SerializeField]
-            public float m_startPositionY;
+            public float startPosY;
 
             [SerializeField]
-            public float m_endPositionY;
+            public float endPosY;
 
             [SerializeField]
-            public float m_movingSpeedY;
+            public float movingSpeedY;
         }
     }
 }
