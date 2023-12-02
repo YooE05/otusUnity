@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,13 +35,6 @@ namespace ShootEmUp
         {
             CheckBoardersReaching();
         }
-
-        public void FlyBulletByArgs(BulletArgs args)
-        {
-            var bullet = this.pool.Get();
-            bullet.SetUpBullet(args);
-            bullet.OnCollisionEntered += this.OnBulletCollision;
-        }
        
         private void CheckBoardersReaching()
         {
@@ -57,13 +51,8 @@ namespace ShootEmUp
             }
         }
 
-        private void OnBulletCollision(Bullet bullet, Collision2D collision)
+        private void OnBulletCollision(Bullet bullet)
         {
-            if (collision.gameObject.TryGetComponent(out HitPointsComponent hitPoints))
-            {
-                hitPoints.TakeDamage(bullet.damage);
-            }
-
             RemoveBullet(bullet);
         }
 
@@ -73,7 +62,12 @@ namespace ShootEmUp
             this.pool.Return(bullet);
         }
 
-
+        internal Bullet GetBullet()
+        {
+            var bullet = this.pool.Get();
+            bullet.OnCollisionEntered += this.OnBulletCollision;
+            return bullet;
+        }
 
         private Bullet Preload() => Instantiate(this.prefab, this.container);
 

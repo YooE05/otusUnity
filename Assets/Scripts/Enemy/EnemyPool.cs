@@ -14,15 +14,12 @@ namespace ShootEmUp
         [SerializeField]
         private int preloadCount;
 
-        public int maxActiveCount;
-
         private Pool<GameObject> pool;
 
         private void Awake()
         {
             pool = new Pool<GameObject>(Preload, GetAction, ReturnAction, preloadCount);
         }
-
 
         public GameObject SpawnEnemy()
         {
@@ -46,18 +43,5 @@ namespace ShootEmUp
         private void GetAction(GameObject enemy) => enemy.SetActive(true);
 
         private void ReturnAction(GameObject enemy) => enemy.SetActive(false);
-
-
-        private struct EnemyOutData
-        {
-            public EnemyOutData(GameObject enemyGO, Vector2 attackPosition)
-            {
-                this.enemyGO = enemyGO;
-                this.attackPosition = attackPosition;
-            }
-
-            public GameObject enemyGO;
-            public Vector2 attackPosition;
-        }
     }
 }

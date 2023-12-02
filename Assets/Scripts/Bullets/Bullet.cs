@@ -5,10 +5,10 @@ namespace ShootEmUp
 {
     public sealed class Bullet : MonoBehaviour
     {
-        public event Action<Bullet, Collision2D> OnCollisionEntered;
+        public event Action<Bullet> OnCollisionEntered;
 
-        [NonSerialized] 
-        public int damage;
+
+        private int damage;
 
         [SerializeField]
         private new Rigidbody2D rigidbody2D;
@@ -17,7 +17,12 @@ namespace ShootEmUp
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            this.OnCollisionEntered?.Invoke(this, collision);
+            this.OnCollisionEntered?.Invoke(this);
+
+            if (collision.gameObject.TryGetComponent(out HitPointsComponent hitPoints))
+            {
+                hitPoints.TakeDamage(this.damage);
+            }
         }
 
 
