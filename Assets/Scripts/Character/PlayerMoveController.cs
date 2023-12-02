@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace ShootEmUp
 {
-    public class PlayerMovement
+    public class PlayerMoveController: MonoBehaviour
     {
+        [SerializeField]
         private LevelBounds bounds;
-
+        [SerializeField]
         private MoveComponent moveComponent;
+        [SerializeField]
+        private InputManager inputManager;
 
-        public PlayerMovement(MoveComponent moveComponent, LevelBounds bounds)
+
+        private void FixedUpdate()
         {
-            this.bounds = bounds;
-            this.moveComponent = moveComponent;
+           MoveCharacter(this.moveComponent.GOTransform.position, this.inputManager.moveDirection, Time.fixedDeltaTime);
         }
 
         public void MoveCharacter(Vector3 charPosition, float horizontalDirection, float timeDelta)

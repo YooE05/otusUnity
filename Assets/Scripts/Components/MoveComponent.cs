@@ -4,6 +4,8 @@ namespace ShootEmUp
 {
     public sealed class MoveComponent : MonoBehaviour
     {
+        public Transform GOTransform { get=> rb.transform; }
+
         [SerializeField]
         private Rigidbody2D rb;
 

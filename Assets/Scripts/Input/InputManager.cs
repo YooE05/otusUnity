@@ -5,7 +5,7 @@ namespace ShootEmUp
 {
     public sealed class InputManager : MonoBehaviour
     {
-        public float horizontalDirection { get; private set; }
+        public float moveDirection { get; private set; }
 
         public Action OnFireButtonPressed;
 
@@ -18,15 +18,15 @@ namespace ShootEmUp
 
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                this.horizontalDirection = -1;
+                this.moveDirection = -1;
             }
             else if (Input.GetKey(KeyCode.RightArrow))
             {
-                this.horizontalDirection = 1;
+                this.moveDirection = 1;
             }
             else
             {
-                this.horizontalDirection = 0;
+                this.moveDirection = 0;
             }
         }
 

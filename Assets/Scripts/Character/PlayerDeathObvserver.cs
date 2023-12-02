@@ -7,24 +7,24 @@ namespace ShootEmUp
     public class PlayerDeathObvserver : MonoBehaviour
     {
         [SerializeField]
-        private HitPointsComponent characterHP;
+        private HitPointsComponent playerHP;
 
         [SerializeField]
         private GameManager gameManager;
 
         private void OnEnable()
         {
-            this.characterHP.OnHpIsEmpty += FinishGame;
+            this.playerHP.OnHpIsEmpty += FinishGame;
         }
 
         private void OnDisable()
         {
-            this.characterHP.OnHpIsEmpty -= FinishGame;
+            this.playerHP.OnHpIsEmpty -= FinishGame;
         }
 
         private void FinishGame(GameObject _)
         {
-            gameManager.FinishGame();
+            this.gameManager.FinishGame();
         }
     }
 }

@@ -7,7 +7,6 @@ namespace ShootEmUp
     {
         public event Action<Bullet> OnCollisionEntered;
 
-
         private int damage;
 
         [SerializeField]
