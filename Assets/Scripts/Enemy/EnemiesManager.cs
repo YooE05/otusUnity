@@ -23,8 +23,7 @@ namespace ShootEmUp
 
         private void OnDestroyed(GameObject enemy)
         {
-            enemy.GetComponent<HitPointsComponent>().OnHpIsEmpty -= this.OnDestroyed;
-            enemy.GetComponent<EnemyAttackAgent>().OnFire -= this.SetUpEnemyBullet;
+            enemy.GetComponent<HitPointsComponent>().OnHitpointsEmpty -= this.OnDestroyed;
             enemyPool.HideEnemy(enemy);
 
             OnEnemyDied?.Invoke();
@@ -39,18 +38,8 @@ namespace ShootEmUp
             var attackPosition = this.enemiePosHandler.GetRandAtkPos().position;
             enemy.GetComponent<EnemyMoveAgent>().SetDestination(attackPosition);
             enemy.GetComponent<EnemyAttackAgent>().SetTarget(enemyTarget);
-            enemy.GetComponent<EnemyAttackAgent>().OnFire += this.SetUpEnemyBullet;
-            enemy.GetComponent<HitPointsComponent>().OnHpIsEmpty += this.OnDestroyed;
+            enemy.GetComponent<WeaponComponent>().bulletSystem = bulletSystem;
+            enemy.GetComponent<HitPointsComponent>().OnHitpointsEmpty += this.OnDestroyed;
         }
-
-
-
-        private void SetUpEnemyBullet(WeaponComponent weaponComponent)
-        {
-            weaponComponent.SetCrntBullet(bulletSystem.GetBullet());
-
-        }
-
-
     }
 }

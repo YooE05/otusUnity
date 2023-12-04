@@ -7,8 +7,7 @@ namespace ShootEmUp
     {
         [SerializeField]
         private WeaponComponent playerWeapon;
-        [SerializeField]
-        private BulletSystem bulletSystem;
+
         [SerializeField]
         private InputManager inputManager;
 
@@ -23,8 +22,7 @@ namespace ShootEmUp
         }
         private void Shoot()
         {
-            this.playerWeapon.SetCrntBullet(this.bulletSystem.GetBullet());
-            this.playerWeapon.Shoot(playerWeapon.Rotation * Vector3.up * playerWeapon.Config.speed);
+            this.playerWeapon.ShootStraight();
         }
     }
 }

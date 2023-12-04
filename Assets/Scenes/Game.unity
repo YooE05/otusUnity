@@ -777,7 +777,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerWeapon: {fileID: 4414282821800802404}
-  bulletSystem: {fileID: 363245577}
   inputManager: {fileID: 1134805361}
 --- !u!114 &1879759791
 MonoBehaviour:
@@ -1397,6 +1396,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firePoint: {fileID: 819281420}
+  bulletSystem: {fileID: 363245577}
   bulletConfig: {fileID: 11400000, guid: 7138ae5d32d814e0ca50c616c65ea105, type: 2}
 --- !u!114 &4414282821800802406 stripped
 MonoBehaviour:

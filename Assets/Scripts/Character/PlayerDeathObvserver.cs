@@ -14,12 +14,12 @@ namespace ShootEmUp
 
         private void OnEnable()
         {
-            this.playerHP.OnHpIsEmpty += FinishGame;
+            this.playerHP.OnHitpointsEmpty += FinishGame;
         }
 
         private void OnDisable()
         {
-            this.playerHP.OnHpIsEmpty -= FinishGame;
+            this.playerHP.OnHitpointsEmpty -= FinishGame;
         }
 
         private void FinishGame(GameObject _)

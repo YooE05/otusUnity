@@ -18,6 +18,7 @@ namespace ShootEmUp
         [SerializeField]
         private Transform firePoint;
 
+        public BulletSystem bulletSystem;
         public BulletConfig Config
         {
             get { return this.bulletConfig; }
@@ -25,26 +26,30 @@ namespace ShootEmUp
 
         [SerializeField]
         private BulletConfig bulletConfig;
-        private Bullet crntBullet;
 
 
-        internal void SetCrntBullet(Bullet bullet)
+        public void ShootByTarget(Vector2 targetPos)
         {
-            this.crntBullet = bullet;
+            var direction = (targetPos - Position).normalized;
+            FlyBullet(direction);
         }
-        public void Shoot(Vector2 direction)
-        {
-                crntBullet.SetUpBullet(new BulletArgs
-                {
-                    physicsLayer = (int)bulletConfig.physicsLayer,
-                    color = bulletConfig.color,
-                    damage = bulletConfig.damage,
-                    position = firePoint.transform.position,
-                    velocity = direction
-                });
-                crntBullet = null;
-            
 
+        public void ShootStraight()
+        {
+            var direction = Rotation * Vector3.up;
+            FlyBullet(direction);
+        }
+
+        private void FlyBullet(Vector2 shoorDirection)
+        {
+            bulletSystem.GetBullet().SetUpBullet(new BulletArgs
+            {
+                physicsLayer = (int)bulletConfig.physicsLayer,
+                color = bulletConfig.color,
+                damage = bulletConfig.damage,
+                position = firePoint.transform.position,
+                velocity = shoorDirection * Config.speed
+            });
         }
     }
 }
