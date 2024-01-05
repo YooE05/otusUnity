@@ -7,25 +7,25 @@ namespace ShootEmUp
     {
         public Vector2 Position
         {
-            get { return this.firePoint.position; }
+            get { return _firePoint.position; }
         }
 
         public Quaternion Rotation
         {
-            get { return this.firePoint.rotation; }
+            get { return _firePoint.rotation; }
         }
 
         [SerializeField]
-        private Transform firePoint;
+        private Transform _firePoint;
 
-        public BulletSystem bulletSystem;
+        public BulletSystem _bulletSystem;
         public BulletConfig Config
         {
-            get { return this.bulletConfig; }
+            get { return _bulletConfig; }
         }
 
         [SerializeField]
-        private BulletConfig bulletConfig;
+        private BulletConfig _bulletConfig;
 
 
         public void ShootByTarget(Vector2 targetPos)
@@ -42,12 +42,12 @@ namespace ShootEmUp
 
         private void FlyBullet(Vector2 shoorDirection)
         {
-            bulletSystem.GetBullet().SetUpBullet(new BulletArgs
+            _bulletSystem.GetBullet().SetUpBullet(new BulletArgs
             {
-                physicsLayer = (int)bulletConfig.physicsLayer,
-                color = bulletConfig.color,
-                damage = bulletConfig.damage,
-                position = firePoint.transform.position,
+                physicsLayer = (int)_bulletConfig.physicsLayer,
+                color = _bulletConfig.color,
+                damage = _bulletConfig.damage,
+                position = _firePoint.transform.position,
                 velocity = shoorDirection * Config.speed
             });
         }

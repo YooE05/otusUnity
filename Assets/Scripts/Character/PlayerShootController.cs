@@ -3,26 +3,31 @@ using System;
 
 namespace ShootEmUp
 {
-    public sealed class PlayerShootController : MonoBehaviour
+    public sealed class PlayerShootController : MonoBehaviour, 
+        Listeners.IStartListener,
+        Listeners.IFinishListener
     {
         [SerializeField]
-        private WeaponComponent playerWeapon;
+        private WeaponComponent _playerWeapon;
 
         [SerializeField]
-        private InputManager inputManager;
+        private InputManager _inputManager;
 
-        private void OnEnable()
+        public void OnStart()
         {
-            this.inputManager.OnFireButtonPressed += Shoot;
+           _inputManager.OnFireButtonPressed += Shoot;
         }
-
-        private void OnDisable()
+        public void OnFinish()
         {
-            this.inputManager.OnFireButtonPressed -= Shoot;
+            _inputManager.OnFireButtonPressed -= Shoot;
         }
+       
         private void Shoot()
         {
-            this.playerWeapon.ShootStraight();
+            _playerWeapon.ShootStraight();
         }
+
+
+
     }
 }

@@ -3,57 +3,87 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class LevelBackground : MonoBehaviour
+    public sealed class LevelBackground : MonoBehaviour,
+        Listeners.IInitListener,
+        Listeners.IFixUpdaterListener,
+        Listeners.IStartListener,
+        Listeners.IPauseListener,
+        Listeners.IResumeListener
+
     {
-        private float startPositionY;
+        private float _startPositionY;
 
-        private float endPositionY;
+        private float _endPositionY;
 
-        private float movingSpeedY;
+        private float _movingSpeedY;
 
-        private Vector2 position;
+        private Vector2 _position;
 
-        private Transform backTransform;
+        private Transform _backTransform;
 
         [SerializeField]
-        private BackgorundParams backParams;
+        private BackgorundParams _backParams;
 
-        private void Awake()
+        public bool _CanUpdate { get => _canUpdate; set => _canUpdate = value; }
+        private bool _canUpdate;
+
+        public void OnInit()
         {
             SetUpBackMove();
+            _canUpdate = false;
         }
-
+        public void OnStart()
+        {
+            _canUpdate = true;
+        }
+        public void OnPause()
+        {
+            _canUpdate = false;
+        }
+        public void OnResume()
+        {
+            _canUpdate = true;
+        }
+        
+        
         private void SetUpBackMove()
         {
-            this.startPositionY = this.backParams.startPosY;
-            this.endPositionY = this.backParams.endPosY;
-            this.movingSpeedY = this.backParams.movingSpeedY;
-            this.backTransform = this.transform;
-            this.position = new Vector2(this.backTransform.position.x, this.backTransform.position.z);
+            _startPositionY = _backParams.startPosY;
+            _endPositionY = _backParams.endPosY;
+            _movingSpeedY = _backParams.movingSpeedY;
+            _backTransform = transform;
+            _position = new Vector2(_backTransform.position.x, _backTransform.position.z);
         }
 
-        private void FixedUpdate()
+        public void OnFixedUpdate(float deltaTime)
         {
-            MoveBackground();
+            if (_canUpdate)
+            {
+                MoveBackground();
+            }
+
         }
 
         private void MoveBackground()
         {
-            if (this.backTransform.position.y <= this.endPositionY)
+            if (_backTransform.position.y <= _endPositionY)
             {
-                this.backTransform.position = new Vector3(
-                    this.position.x,
-                    this.startPositionY,
-                    this.position.y
-                );
+                _backTransform.position = new Vector3(
+                    _position.x,
+                    _startPositionY,
+                    _position.y
+               );
             }
 
-            this.backTransform.position -= new Vector3(
-                this.position.x,
-                this.movingSpeedY * Time.fixedDeltaTime,
-                this.position.y
-            );
+            _backTransform.position -= new Vector3(
+                _position.x,
+                _movingSpeedY * Time.fixedDeltaTime,
+                _position.y
+           );
         }
+
+
+
 
         [Serializable]
         public sealed class BackgorundParams

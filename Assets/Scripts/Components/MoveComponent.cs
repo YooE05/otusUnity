@@ -4,18 +4,18 @@ namespace ShootEmUp
 {
     public sealed class MoveComponent : MonoBehaviour
     {
-        public Transform GOTransform { get=> rb.transform; }
+        public Transform GOTransform { get=> _rb.transform; }
 
         [SerializeField]
-        private Rigidbody2D rb;
+        private Rigidbody2D _rb;
 
         [SerializeField]
-        private float speed = 5.0f;
+        private float _speed = 5.0f;
         
         public void MoveByRigidbody(Vector2 vector)
         {
-            var nextPosition = this.rb.position + vector * this.speed;
-            this.rb.MovePosition(nextPosition);
+            var nextPosition =_rb.position + vector * _speed;
+            _rb.MovePosition(nextPosition);
         }
     }
 }

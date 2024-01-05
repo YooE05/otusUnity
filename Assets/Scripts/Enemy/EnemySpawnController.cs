@@ -4,55 +4,108 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public class EnemySpawnController : MonoBehaviour
+    public class EnemySpawnController : MonoBehaviour,
+        Listeners.IUpdateListener,
+        Listeners.IInitListener,
+        Listeners.IStartListener,
+        Listeners.IFinishListener,
+        Listeners.IPauseListener,
+        Listeners.IResumeListener
     {
         [SerializeField]
-        private EnemiesManager enemiesManager;
+        private EnemiesManager _enemiesManager;
 
         [SerializeField]
-        private float initSpawnDelay;
+        private float _initSpawnDelay;
 
         [SerializeField]
-        private float newSpawnDelay;
+        private float _newSpawnDelay;
 
         [SerializeField]
-        private int initEnemiesCnt;
+        private int _initEnemiesCnt;
 
-        private void OnEnable()
+        public bool _CanUpdate { get => _canUpdate; set => _canUpdate = value; }
+        private bool _canUpdate;
+        private float _timer;
+
+        public void OnUpdate(float deltaTime)
         {
-            enemiesManager.OnEnemyDied += SpawnNewEnemy;
+            if (_canUpdate)
+            {
+                _timer += deltaTime;
+            }
         }
-        private void OnDisable()
+
+        public void OnInit()
         {
-            enemiesManager.OnEnemyDied -= SpawnNewEnemy;
+            _canUpdate = false;
         }
-   
-        private void Start()
+        public void OnStart()
         {
+            _canUpdate = true;
+
+            _timer = 0f;
+            _enemiesManager.OnEnemyDied += SpawnNewEnemy;
             StartCoroutine(InitEnemySpawn());
         }
 
+        public void OnFinish()
+        {
+            _enemiesManager.OnEnemyDied -= SpawnNewEnemy;
+        }
+
+        public void OnPause()
+        {
+            _canUpdate = false;
+        }
+
+        public void OnResume()
+        {
+            _canUpdate = true;
+        }
+
+
+
         private IEnumerator InitEnemySpawn()
         {
-            int i = initEnemiesCnt;
+            int i = _initEnemiesCnt;
             while (i > 0)
             {
-                yield return StartCoroutine(SpawnByDelay(initSpawnDelay));
+                float needTime = _timer + _initSpawnDelay;
+                StartCoroutine(SpawnByDelay(_initSpawnDelay));
+
+                while (true)
+                {
+                    if (_timer >= needTime)
+                    { break; }
+                    yield return null;
+                }
+
                 i--;
             }
         }
 
         private void SpawnNewEnemy()
         {
-            StartCoroutine(SpawnByDelay(newSpawnDelay));
+            StartCoroutine(SpawnByDelay(_newSpawnDelay));
         }
 
         private IEnumerator SpawnByDelay(float delay)
         {
-                yield return new WaitForSeconds(delay);
-                enemiesManager.InitNewEnemy();
+            float needTime = _timer + delay;
+
+            while (true)
+            {
+                if (_timer >= needTime)
+                {
+                    _enemiesManager.InitNewEnemy();
+                    break;
+                }
+
+                yield return null;
+            }
+
+            yield return null;
         }
-
-
     }
 }

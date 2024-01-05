@@ -6,18 +6,18 @@ using UnityEngine;
 public class Pool<T>
 {
 
-    private Queue<T> pool = new Queue<T>();
-    private readonly List<T> activeItms = new();
+    private Queue<T> _pool = new Queue<T>();
+    private readonly List<T> _activeItms = new();
 
-    private readonly Func<T> preloadFunc;
-    private readonly Action<T> getAction;
-    private readonly Action<T> returnAction;
+    private readonly Func<T> _preloadFunc;
+    private readonly Action<T> _getAction;
+    private readonly Action<T> _returnAction;
 
     public Pool(Func<T> preloadFunc, Action<T> getAction, Action<T> returnAction, int preloadCount)
     {
-        this.preloadFunc = preloadFunc;
-        this.getAction = getAction;
-        this.returnAction = returnAction;
+        _preloadFunc = preloadFunc;
+        _getAction = getAction;
+        _returnAction = returnAction;
 
         if(preloadFunc==null)
         {
@@ -35,23 +35,23 @@ public class Pool<T>
 
     public T Get()
     {
-        T item = pool.Count > 0 ? pool.Dequeue() : preloadFunc();
-        getAction(item);
-        activeItms.Add(item);
+        T item = _pool.Count > 0 ? _pool.Dequeue() : _preloadFunc();
+        _getAction(item);
+        _activeItms.Add(item);
 
         return item;
     }
 
     public void Return(T item)
     {
-        returnAction(item);
-        pool.Enqueue(item);
-        activeItms.Remove(item);
+        _returnAction(item);
+        _pool.Enqueue(item);
+        _activeItms.Remove(item);
     }
 
     public void ReturnAll()
     {
-        foreach (T item in activeItms.ToArray())
+        foreach (T item in _activeItms.ToArray())
         {
             Return(item);
         }
@@ -59,6 +59,6 @@ public class Pool<T>
 
     public List<T> GetActiveItms()
     {
-        return activeItms;
+        return _activeItms;
     }
 }

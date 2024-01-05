@@ -10,35 +10,35 @@ namespace ShootEmUp
         public Action OnEnemyDied;
 
         [SerializeField]
-        private EnemyPositions enemiePosHandler;
+        private EnemyPositions _enemiePosHandler;
 
         [SerializeField]
-        private EnemyPool enemyPool;
+        private EnemyPool _enemyPool;
 
         [SerializeField]
-        private BulletSystem bulletSystem;
+        private BulletSystem _bulletSystem;
 
         [SerializeField]
-        private GameObject enemyTarget;
+        private GameObject _enemyTarget;
 
         private void OnDestroyed(GameObject enemy)
         {
             enemy.GetComponent<HitPointsComponent>().OnHitpointsEmpty -= this.OnDestroyed;
-            enemyPool.HideEnemy(enemy);
+            _enemyPool.HideEnemy(enemy);
 
             OnEnemyDied?.Invoke();
         }
 
         public void InitNewEnemy()
         {
-            var enemy = enemyPool.SpawnEnemy();
+            var enemy = _enemyPool.SpawnEnemy();
 
-            var spawnPosition = this.enemiePosHandler.GetRandSpawnPos();
+            var spawnPosition = _enemiePosHandler.GetRandSpawnPos();
             enemy.transform.position = spawnPosition.position;
-            var attackPosition = this.enemiePosHandler.GetRandAtkPos().position;
+            var attackPosition = _enemiePosHandler.GetRandAtkPos().position;
             enemy.GetComponent<EnemyMoveAgent>().SetDestination(attackPosition);
-            enemy.GetComponent<EnemyAttackAgent>().SetTarget(enemyTarget);
-            enemy.GetComponent<WeaponComponent>().bulletSystem = bulletSystem;
+            enemy.GetComponent<EnemyAttackAgent>().SetTarget(_enemyTarget);
+            enemy.GetComponent<WeaponComponent>()._bulletSystem = _bulletSystem;
             enemy.GetComponent<HitPointsComponent>().OnHitpointsEmpty += this.OnDestroyed;
         }
     }

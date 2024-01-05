@@ -3,45 +3,54 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class EnemyPool : MonoBehaviour
+    public sealed class EnemyPool : MonoBehaviour, Listeners.IInitListener
     {
         [SerializeField]
-        private Transform container;
+        private GameManagerBuilder _gameManagerBuilder;
 
         [SerializeField]
-        private GameObject prefab;
+        private Transform _container;
 
         [SerializeField]
-        private int preloadCount;
+        private GameObject _prefab;
 
-        private Pool<GameObject> pool;
+        [SerializeField]
+        private int _preloadCount;
 
-        private void Awake()
+        private Pool<GameObject> _pool;
+
+        public void OnInit()
         {
-            pool = new Pool<GameObject>(Preload, GetAction, ReturnAction, preloadCount);
+            _pool = new Pool<GameObject>(Preload, GetAction, ReturnAction, _preloadCount);
         }
 
         public GameObject SpawnEnemy()
         {
-            return pool.Get();
+            return _pool.Get();
         }
 
         public void HideEnemy(GameObject enemy)
         {
-            pool.Return(enemy);
+            _pool.Return(enemy);
         }
 
         public List<GameObject> GetActiveEnemies()
         {
-            return pool.GetActiveItms();
+            return _pool.GetActiveItms();
         }
 
+        private GameObject Preload() => SetUpListeners();
+        private GameObject SetUpListeners()
+        {
+            var newEnemy = Instantiate(_prefab, _container);
 
+            _gameManagerBuilder.AddListeners(newEnemy);
 
-        private GameObject Preload() => Instantiate(this.prefab, this.container);
-
+            return newEnemy;
+        }
         private void GetAction(GameObject enemy) => enemy.SetActive(true);
 
         private void ReturnAction(GameObject enemy) => enemy.SetActive(false);
+
     }
 }

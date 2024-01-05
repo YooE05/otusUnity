@@ -3,24 +3,28 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class Bullet : MonoBehaviour
+    public sealed class Bullet : MonoBehaviour,
+        Listeners.IPauseListener,
+        Listeners.IResumeListener
     {
         public event Action<Bullet> OnCollisionEntered;
 
-        private int damage;
+        private int _damage;
 
         [SerializeField]
-        private new Rigidbody2D rigidbody2D;
+        private Rigidbody2D _rigidbody2D;
         [SerializeField]
-        private SpriteRenderer spriteRenderer;
+        private SpriteRenderer _spriteRenderer;
+
+        private Vector2 _crntVelocity;
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            this.OnCollisionEntered?.Invoke(this);
+             OnCollisionEntered?.Invoke(this);
 
             if (collision.gameObject.TryGetComponent(out HitPointsComponent hitPoints))
             {
-                hitPoints.TakeDamage(this.damage);
+                hitPoints.TakeDamage( _damage);
             }
         }
 
@@ -30,28 +34,39 @@ namespace ShootEmUp
             SetPosition(args.position);
             SetColor(args.color);
             SetPhysicsLayer(args.physicsLayer);
-            this.damage = args.damage;
+            _damage = args.damage;
             SetVelocity(args.velocity);
         }
 
         private void SetVelocity(Vector2 velocity)
         {
-            this.rigidbody2D.velocity = velocity;
+             _rigidbody2D.velocity = velocity;
         }
 
         private void SetPhysicsLayer(int physicsLayer)
         {
-            this.gameObject.layer = physicsLayer;
+             gameObject.layer = physicsLayer;
         }
 
         private void SetPosition(Vector3 position)
         {
-            this.transform.position = position;
+             transform.position = position;
         }
 
         private void SetColor(Color color)
         {
-            this.spriteRenderer.color = color;
+             _spriteRenderer.color = color;
+        }
+
+        public void OnResume()
+        {
+            _rigidbody2D.velocity = _crntVelocity;
+        }
+
+        public void OnPause()
+        {
+            _crntVelocity = _rigidbody2D.velocity;
+            _rigidbody2D.velocity = Vector2.zero;
         }
     }
 }
