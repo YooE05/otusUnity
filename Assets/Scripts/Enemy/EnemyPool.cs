@@ -6,7 +6,7 @@ namespace ShootEmUp
     public sealed class EnemyPool : MonoBehaviour, Listeners.IInitListener
     {
         [SerializeField]
-        private GameManagerBuilder _gameManagerBuilder;
+        private GameManager _gameManager;
 
         [SerializeField]
         private Transform _container;
@@ -44,7 +44,7 @@ namespace ShootEmUp
         {
             var newEnemy = Instantiate(_prefab, _container);
 
-            _gameManagerBuilder.AddListeners(newEnemy);
+            _gameManager.AddListeners(newEnemy);
 
             return newEnemy;
         }

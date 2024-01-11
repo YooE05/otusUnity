@@ -5,10 +5,7 @@ namespace ShootEmUp
 {
     public sealed class LevelBackground : MonoBehaviour,
         Listeners.IInitListener,
-        Listeners.IFixUpdaterListener,
-        Listeners.IStartListener,
-        Listeners.IPauseListener,
-        Listeners.IResumeListener
+        Listeners.IFixUpdaterListener
 
     {
         private float _startPositionY;
@@ -24,27 +21,12 @@ namespace ShootEmUp
         [SerializeField]
         private BackgorundParams _backParams;
 
-        public bool _CanUpdate { get => _canUpdate; set => _canUpdate = value; }
-        private bool _canUpdate;
 
         public void OnInit()
         {
             SetUpBackMove();
-            _canUpdate = false;
         }
-        public void OnStart()
-        {
-            _canUpdate = true;
-        }
-        public void OnPause()
-        {
-            _canUpdate = false;
-        }
-        public void OnResume()
-        {
-            _canUpdate = true;
-        }
-        
+       
         
         private void SetUpBackMove()
         {
@@ -57,11 +39,7 @@ namespace ShootEmUp
 
         public void OnFixedUpdate(float deltaTime)
         {
-            if (_canUpdate)
-            {
-                MoveBackground();
-            }
-
+           MoveBackground(); 
         }
 
         private void MoveBackground()

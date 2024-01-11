@@ -5,13 +5,12 @@ using UnityEngine;
 namespace ShootEmUp
 {
     public class EnemySpawnController : MonoBehaviour,
-        Listeners.IUpdateListener,
-        Listeners.IInitListener,
         Listeners.IStartListener,
-        Listeners.IFinishListener,
-        Listeners.IPauseListener,
-        Listeners.IResumeListener
+        Listeners.IFinishListener
     {
+        [SerializeField]
+        private GameManager _gameManager;
+
         [SerializeField]
         private EnemiesManager _enemiesManager;
 
@@ -24,29 +23,20 @@ namespace ShootEmUp
         [SerializeField]
         private int _initEnemiesCnt;
 
-        public bool _CanUpdate { get => _canUpdate; set => _canUpdate = value; }
-        private bool _canUpdate;
-        private float _timer;
+        private UpdatebleCountdown _initSpawnCountdown = new UpdatebleCountdown();
+        private List<UpdatebleCountdown> _playSpawnCountdowns = new();
 
-        public void OnUpdate(float deltaTime)
-        {
-            if (_canUpdate)
-            {
-                _timer += deltaTime;
-            }
-        }
 
-        public void OnInit()
-        {
-            _canUpdate = false;
-        }
         public void OnStart()
         {
-            _canUpdate = true;
+            _initSpawnCountdown.OnValueChanged += InitEnemy;
+            _initSpawnCountdown.OnCountdownEnded += RemoveCountdownListener;
 
-            _timer = 0f;
             _enemiesManager.OnEnemyDied += SpawnNewEnemy;
-            StartCoroutine(InitEnemySpawn());
+
+            _gameManager.AddListener(_initSpawnCountdown);
+
+            _initSpawnCountdown.StartTimer(_initEnemiesCnt, _initSpawnDelay);
         }
 
         public void OnFinish()
@@ -54,58 +44,35 @@ namespace ShootEmUp
             _enemiesManager.OnEnemyDied -= SpawnNewEnemy;
         }
 
-        public void OnPause()
+        private void RemoveCountdownListener(Countdown countdown)
         {
-            _canUpdate = false;
-        }
-
-        public void OnResume()
-        {
-            _canUpdate = true;
-        }
-
-
-
-        private IEnumerator InitEnemySpawn()
-        {
-            int i = _initEnemiesCnt;
-            while (i > 0)
-            {
-                float needTime = _timer + _initSpawnDelay;
-                StartCoroutine(SpawnByDelay(_initSpawnDelay));
-
-                while (true)
-                {
-                    if (_timer >= needTime)
-                    { break; }
-                    yield return null;
-                }
-
-                i--;
-            }
+            _initSpawnCountdown.OnValueChanged -= InitEnemy;
+            _initSpawnCountdown.OnCountdownEnded -= RemoveCountdownListener;
+            _initSpawnCountdown.Dispose();
         }
 
         private void SpawnNewEnemy()
         {
-            StartCoroutine(SpawnByDelay(_newSpawnDelay));
-        }
+            var spawnCountdown = new UpdatebleCountdown();
+            spawnCountdown.OnCountdownEnded += InitEnemyAndDespose;
 
-        private IEnumerator SpawnByDelay(float delay)
+            _gameManager.AddListener(spawnCountdown);
+            _playSpawnCountdowns.Add(spawnCountdown);
+
+            spawnCountdown.StartTimer(1, _newSpawnDelay);
+        }
+        private void InitEnemy(int _)
         {
-            float needTime = _timer + delay;
-
-            while (true)
-            {
-                if (_timer >= needTime)
-                {
-                    _enemiesManager.InitNewEnemy();
-                    break;
-                }
-
-                yield return null;
-            }
-
-            yield return null;
+            _enemiesManager.InitNewEnemy();
         }
+        private void InitEnemyAndDespose(Countdown countdown)
+        {
+            countdown.OnCountdownEnded -= InitEnemyAndDespose;
+            _playSpawnCountdowns.Remove((UpdatebleCountdown)countdown);
+            _gameManager.RemoveListener((UpdatebleCountdown)countdown);
+            countdown.Dispose();
+            _enemiesManager.InitNewEnemy();
+        }
+
     }
 }

@@ -33,18 +33,15 @@ namespace ShootEmUp
         }
         public interface IUpdateListener : IGameListener
         {
-            bool _CanUpdate { get; set; }
             void OnUpdate(float deltaTime);
         }
         public interface IFixUpdaterListener : IGameListener
         {
-            bool _CanUpdate { get; set; }
             void OnFixedUpdate(float deltaTime);
         }
-        public interface ILateUpdateListener : IGameListener
+        public interface IPrestartUpdateListener : IGameListener
         {
-            bool _CanUpdate { get; set; }
-            void OnLateUpdate(float deltaTime);
+            void OnPrestartUpdate(float deltaTime);
         }
 
 

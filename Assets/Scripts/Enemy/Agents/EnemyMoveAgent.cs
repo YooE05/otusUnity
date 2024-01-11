@@ -4,23 +4,20 @@ namespace ShootEmUp
 {
     public sealed class EnemyMoveAgent : MonoBehaviour,
         Listeners.IFixUpdaterListener,
-        Listeners.IInitListener,
-        Listeners.IStartListener,
-        Listeners.IPauseListener,
-        Listeners.IResumeListener
+        Listeners.IInitListener
     {
         public bool IsReached
         {
             get { return _isReached; }
         }
 
+        private const float _moveThewshold = 0.25f;
         [SerializeField] private MoveComponent _moveComponent;
 
         private Vector2 _destination;
 
         private bool _isReached;
-        public bool _CanUpdate { get => _canUpdate; set => _canUpdate = value; }
-        private bool _canUpdate;
+
         public void SetDestination(Vector2 endPoint)
         {
             _destination = endPoint;
@@ -30,40 +27,25 @@ namespace ShootEmUp
 
         public void OnFixedUpdate(float deltaTime)
         {
-            if (_canUpdate)
+            if (_isReached)
             {
-                if (_isReached)
-                {
-                    return;
-                }
-
-                var vector = _destination - (Vector2)transform.position;
-                if (vector.magnitude <= 0.25f)
-                {
-                    _isReached = true;
-                    return;
-                }
-
-                var direction = vector.normalized * deltaTime;
-                _moveComponent.MoveByRigidbody(direction);
+                return;
             }
+
+            var vector = _destination - (Vector2)transform.position;
+            if (vector.sqrMagnitude <= _moveThewshold * _moveThewshold)
+            {
+                _isReached = true;
+                return;
+            }
+
+            var direction = vector.normalized * deltaTime;
+            _moveComponent.MoveByRigidbody(direction);
         }
         public void OnInit()
         {
-            _canUpdate = false;
             _isReached = true;
         }
-        public void OnStart()
-        {
-            _canUpdate = true;
-        }
-        public void OnPause()
-        {
-            _canUpdate = false;
-        }
-        public void OnResume()
-        {
-            _canUpdate = true;
-        }
+
     }
 }

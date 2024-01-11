@@ -5,112 +5,41 @@ using UnityEngine;
 namespace ShootEmUp
 {
     public sealed class BulletSystem : MonoBehaviour,
-        Listeners.IInitListener,
-        Listeners.IFixUpdaterListener,
-        Listeners.IPauseListener,
-        Listeners.IResumeListener,
-        Listeners.IStartListener
+        Listeners.IFixUpdaterListener
     {
-        public bool _CanUpdate { get => _canUpdate; set => _canUpdate = value; }
-        private bool _canUpdate;
-
-        [SerializeField]
-        private GameManagerBuilder _gameManagerBuilder;
-
         [SerializeField]
         private LevelBounds _levelBounds;
 
-        [SerializeField]
-        private Transform _container;
-        [SerializeField]
-        private Bullet _prefab;
-
-
         [Header("Pool")]
         [SerializeField]
-        private int _preloadCount = 50;
-
-        private Pool<Bullet> _pool;
-
+        private BulletPool _bulletPool;
         private readonly List<Bullet> _cache = new();
-
-        public void OnInit()
-        {
-            _pool = new Pool<Bullet>(Preload, GetAction, ReturnAction, _preloadCount);
-            _canUpdate = false;
-        }
-        public void OnStart()
-        {
-            _canUpdate = true;
-        }
-
-        public void OnPause()
-        {
-            _canUpdate = false;
-        }
-
-        public void OnResume()
-        {
-            _canUpdate = true;
-        }
-
 
         public void OnFixedUpdate(float deltaTime)
         {
-            if (_canUpdate)
-            {
-                CheckBoardersReaching();
-            }
-
+            CheckBoardersReaching();
         }
 
         private void CheckBoardersReaching()
         {
             _cache.Clear();
-            _cache.AddRange(_pool.GetActiveItms());
+            _cache.AddRange(_bulletPool.GetActiveBullet());
 
             for (int i = 0, count = _cache.Count; i < count; i++)
             {
                 var bullet = _cache[i];
                 if (!_levelBounds.InBounds(bullet.transform.position))
                 {
-                    RemoveBullet(bullet);
+                    _bulletPool.RemoveBullet(bullet);
                 }
             }
         }
 
-        private void OnBulletCollision(Bullet bullet)
-        {
-            RemoveBullet(bullet);
-        }
-
-        private void RemoveBullet(Bullet bullet)
-        {
-            bullet.OnCollisionEntered -= OnBulletCollision;
-            _pool.Return(bullet);
-        }
-
         internal Bullet GetBullet()
         {
-            var bullet = _pool.Get();
-            bullet.OnCollisionEntered += OnBulletCollision;
-            return bullet;
+            return _bulletPool.Get();
         }
 
-        private Bullet Preload() => SetUpListeners();
-
-        private Bullet SetUpListeners()
-        {
-            var newBullet = Instantiate(_prefab, _container);
-
-            _gameManagerBuilder.AddListeners(newBullet.gameObject);
-
-            return newBullet;
-        }
-
-        private void GetAction(Bullet bullet) => bullet.gameObject.SetActive(true);
-
-        private void ReturnAction(Bullet bullet) => bullet.gameObject.SetActive(false);
     }
     public struct BulletArgs
     {

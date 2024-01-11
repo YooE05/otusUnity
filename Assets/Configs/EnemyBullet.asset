@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f607d62c36cf429b98fd5e0d29773f70, type: 3}
   m_Name: EnemyBullet
   m_EditorClassIdentifier: 
-  physicsLayer: 13
-  color: {r: 0.764151, g: 0.2507201, b: 0.11894804, a: 1}
-  damage: 1
-  speed: 2
+  <PhysicsLayer>k__BackingField: 13
+  <Color>k__BackingField: {r: 0.7735849, g: 0.111841105, b: 0.10509074, a: 1}
+  <Damage>k__BackingField: 1
+  <Speed>k__BackingField: 3

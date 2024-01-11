@@ -5,20 +5,15 @@ namespace ShootEmUp
 {
     public sealed class WeaponComponent : MonoBehaviour
     {
-        public Vector2 Position
-        {
-            get { return _firePoint.position; }
-        }
+        public Vector2 Position => _firePoint.position;
 
-        public Quaternion Rotation
-        {
-            get { return _firePoint.rotation; }
-        }
+        public Quaternion Rotation => _firePoint.rotation;
 
         [SerializeField]
         private Transform _firePoint;
 
-        public BulletSystem _bulletSystem;
+        [SerializeField]
+        private BulletSystem _bulletSystem;
         public BulletConfig Config
         {
             get { return _bulletConfig; }
@@ -27,6 +22,10 @@ namespace ShootEmUp
         [SerializeField]
         private BulletConfig _bulletConfig;
 
+        public void SetBulletSystem(BulletSystem bulletSystem)
+        {
+            _bulletSystem = bulletSystem;
+        }
 
         public void ShootByTarget(Vector2 targetPos)
         {
@@ -44,11 +43,11 @@ namespace ShootEmUp
         {
             _bulletSystem.GetBullet().SetUpBullet(new BulletArgs
             {
-                physicsLayer = (int)_bulletConfig.physicsLayer,
-                color = _bulletConfig.color,
-                damage = _bulletConfig.damage,
+                physicsLayer = (int)_bulletConfig.PhysicsLayer,
+                color = _bulletConfig.Color,
+                damage = _bulletConfig.Damage,
                 position = _firePoint.transform.position,
-                velocity = shoorDirection * Config.speed
+                velocity = shoorDirection * Config.Speed
             });
         }
     }

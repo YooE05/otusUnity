@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System;
 using UnityEngine;
 
@@ -38,7 +36,7 @@ namespace ShootEmUp
             var attackPosition = _enemiePosHandler.GetRandAtkPos().position;
             enemy.GetComponent<EnemyMoveAgent>().SetDestination(attackPosition);
             enemy.GetComponent<EnemyAttackAgent>().SetTarget(_enemyTarget);
-            enemy.GetComponent<WeaponComponent>()._bulletSystem = _bulletSystem;
+            enemy.GetComponent<WeaponComponent>().SetBulletSystem(_bulletSystem);
             enemy.GetComponent<HitPointsComponent>().OnHitpointsEmpty += this.OnDestroyed;
         }
     }

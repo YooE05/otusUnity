@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bdcdf257e0242258e7a67fe13d80e5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameManagerBuilder: {fileID: 3951702117947426123}
+  _gameManager: {fileID: 3951702117947426124}
   _container: {fileID: 178513672}
   _prefab: {fileID: 559606060570185700, guid: 87fe189881a524806800482ac8eaaa83, type: 3}
   _preloadCount: 10
@@ -278,11 +278,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37bd15923a144ffbab0333dc6e74e641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameManagerBuilder: {fileID: 3951702117947426123}
   _levelBounds: {fileID: 2572952653776768186}
-  _container: {fileID: 1831741369}
-  _prefab: {fileID: 201757604187811891, guid: 5fe72886874b4e445b06cf777ca4920d, type: 3}
-  _preloadCount: 50
+  _bulletPool: {fileID: 1831741370}
 --- !u!1 &460816997
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,9 +560,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a013bb248610e94485212576ccf30a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameManager: {fileID: 3951702117947426124}
   _enemiesManager: {fileID: 562298205}
   _initSpawnDelay: 0.5
-  _newSpawnDelay: 0.5
+  _newSpawnDelay: 1
   _initEnemiesCnt: 5
 --- !u!114 &578446883
 MonoBehaviour:
@@ -580,6 +578,97 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hitPoints: 5
+--- !u!1 &633769542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 633769544}
+  - component: {fileID: 633769543}
+  - component: {fileID: 633769545}
+  - component: {fileID: 633769546}
+  m_Layer: 0
+  m_Name: SceneContext
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &633769543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 633769542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89715ad69b973a14899afa2c6730b30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scriptableObjectInstallers: []
+  _monoInstallers:
+  - {fileID: 633769545}
+  _installerPrefabs: []
+  _autoRun: 1
+  OnPreInstall:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPostInstall:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPreResolve:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPostResolve:
+    m_PersistentCalls:
+      m_Calls: []
+  _parentNewObjectsUnderSceneContext: 0
+  _contractNames: []
+  _parentContractNames: []
+--- !u!4 &633769544
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 633769542}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &633769545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 633769542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da92c84c3bc557d478ab113a4d469cd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _testPlayer: {fileID: 633769546}
+--- !u!114 &633769546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 633769542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37aaefe9b036c854d95a0c8207e956fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &679438825
 GameObject:
   m_ObjectHideFlags: 0
@@ -772,6 +861,8 @@ GameObject:
   - component: {fileID: 924248680}
   - component: {fileID: 924248679}
   - component: {fileID: 924248678}
+  - component: {fileID: 924248685}
+  - component: {fileID: 924248684}
   - component: {fileID: 924248683}
   - component: {fileID: 924248682}
   m_Layer: 5
@@ -878,10 +969,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 007d9067ef91b8748a957fba877313bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startButton: {fileID: 1779270656}
   _pauseButton: {fileID: 460816999}
   _resumeButton: {fileID: 1239196421}
-  _txtView: {fileID: 1559581061}
 --- !u!114 &924248683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -896,7 +985,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameManager: {fileID: 3951702117947426124}
   _view: {fileID: 924248682}
-  _countdown: 3
+--- !u!114 &924248684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924248677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c89d0307d182cd04d99fe23b0ae45388, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _startButton: {fileID: 1779270656}
+  _txtView: {fileID: 1559581061}
+--- !u!114 &924248685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924248677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8366915b37538b947ba3fc9d99209ea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameManager: {fileID: 3951702117947426124}
+  _view: {fileID: 924248684}
+  _countdownTime: 3
 --- !u!1 &1049219807
 GameObject:
   m_ObjectHideFlags: 0
@@ -1684,9 +1801,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 924248683}
-        m_TargetAssemblyTypeName: ShootEmUp.UIController, Assembly-CSharp
+      - m_Target: {fileID: 924248685}
+        m_TargetAssemblyTypeName: ShootEmUp.StartFinishUIController, Assembly-CSharp
         m_MethodName: OnStartClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 924248683}
+        m_TargetAssemblyTypeName: ShootEmUp.PauseUIController, Assembly-CSharp
+        m_MethodName: ShowPauseButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1743,6 +1872,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1831741369}
+  - component: {fileID: 1831741370}
   m_Layer: 0
   m_Name: Pool
   m_TagString: Untagged
@@ -1765,6 +1895,22 @@ Transform:
   m_Father: {fileID: 363245576}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1831741370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831741368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd9dcf17d21ec9f4abdb2bb4519fddc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameManager: {fileID: 3951702117947426124}
+  _container: {fileID: 1831741369}
+  _prefab: {fileID: 201757604187811891, guid: 5fe72886874b4e445b06cf777ca4920d, type: 3}
+  _preloadCount: 50
 --- !u!1 &1873194247
 GameObject:
   m_ObjectHideFlags: 0
@@ -2505,7 +2651,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fd8f0cc8993a5541ba8d1a99f222802, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameManager: {fileID: 0}
 --- !u!114 &3951702117947426124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2518,7 +2663,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 697fe7ba192e484db495320b9c01bcd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameState: 0
+  _currentGameState: 0
 --- !u!212 &4162873433806880330
 SpriteRenderer:
   m_ObjectHideFlags: 0
