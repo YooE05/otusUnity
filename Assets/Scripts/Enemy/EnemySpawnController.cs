@@ -1,30 +1,27 @@
-using System.Collections;
+using Zenject;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public class EnemySpawnController : MonoBehaviour,
+    public class EnemySpawnController :
         Listeners.IStartListener,
         Listeners.IFinishListener
     {
-        [SerializeField]
+
         private GameManager _gameManager;
-
-        [SerializeField]
         private EnemiesManager _enemiesManager;
-
-        [SerializeField]
-        private float _initSpawnDelay;
-
-        [SerializeField]
-        private float _newSpawnDelay;
-
-        [SerializeField]
-        private int _initEnemiesCnt;
+        private EnemySystemConfig _config;
 
         private UpdatebleCountdown _initSpawnCountdown = new UpdatebleCountdown();
         private List<UpdatebleCountdown> _playSpawnCountdowns = new();
+
+        public EnemySpawnController(GameManager gameManager, EnemiesManager enemiesManager, EnemySystemConfig config)
+        {
+            _gameManager = gameManager;
+            _enemiesManager = enemiesManager;
+            _config = config;
+        }
 
 
         public void OnStart()
@@ -36,7 +33,7 @@ namespace ShootEmUp
 
             _gameManager.AddListener(_initSpawnCountdown);
 
-            _initSpawnCountdown.StartTimer(_initEnemiesCnt, _initSpawnDelay);
+            _initSpawnCountdown.StartTimer(_config.SimultaneousEnemiesCount, _config.InitSpawnDelay);
         }
 
         public void OnFinish()
@@ -59,7 +56,7 @@ namespace ShootEmUp
             _gameManager.AddListener(spawnCountdown);
             _playSpawnCountdowns.Add(spawnCountdown);
 
-            spawnCountdown.StartTimer(1, _newSpawnDelay);
+            spawnCountdown.StartTimer(1, _config.NewSpawnDelay);
         }
         private void InitEnemy(int _)
         {

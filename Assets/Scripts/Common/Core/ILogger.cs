@@ -11,7 +11,7 @@ namespace ShootEmUp
     {
         public Logger()
         {
-            Debug.Log("LogVar");
+          //  Debug.Log("LogVar");
         }
         
         public void Log(string message)
@@ -20,18 +20,5 @@ namespace ShootEmUp
         }
 
     }
-
-    public sealed class SmthController
-    { 
-    
-        public SmthController(ILogger logger, TestPlayer player) 
-        {
-            logger.Log("smt construct");
-            player.GogoZeppely();
-        }
-
-    
-    }
-
 
 }

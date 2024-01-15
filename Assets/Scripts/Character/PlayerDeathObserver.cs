@@ -1,19 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public class PlayerDeathObserver : MonoBehaviour,
+    public class PlayerDeathObserver :
         Listeners.IStartListener,
         Listeners.IFinishListener
     {
-        [SerializeField]
         private HitPointsComponent _playerHP;
-
-        [SerializeField]
         private GameManager _gameManager;
-       
+
+        public PlayerDeathObserver(GameManager gameManager, HitPointsComponent playerHP)
+        {
+            _gameManager = gameManager;
+            _playerHP = playerHP;
+        }
+
         public void OnStart()
         {
             _playerHP.OnHitpointsEmpty += FinishGame;

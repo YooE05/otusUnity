@@ -157,7 +157,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _firePoint: {fileID: 3195880656587174614}
-  _bulletSystem: {fileID: 0}
   _bulletConfig: {fileID: 11400000, guid: b224f76332d2f854e9429238d9c8adda, type: 2}
 --- !u!114 &5568771391735819373
 MonoBehaviour:
@@ -197,8 +196,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba7965842e74a9f89ba3aa66d61da46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponComponent: {fileID: 6237899086841923603}
-  _countdown: 2
+  _weaponComponent: {fileID: 6237899086841923603}
+  _attackDelay: 1
 --- !u!114 &2328225454965109518
 MonoBehaviour:
   m_ObjectHideFlags: 0

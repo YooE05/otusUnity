@@ -3,30 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace ShootEmUp
 {
-    public class PlayerMoveController : MonoBehaviour,
+    public class PlayerMoveController :
         Listeners.IFixUpdaterListener,
         Listeners.IFinishListener
-
     {
-        [SerializeField]
-        private LevelBounds _bounds;
-        [SerializeField]
+        private BoundsChecker _boundsChecker;
         private MoveComponent _moveComponent;
-        [SerializeField]
         private InputManager _inputManager;
+
+        public PlayerMoveController(BoundsChecker boundsChecker, MoveComponent moveComponent, InputManager inputManager)
+        {
+            _boundsChecker = boundsChecker;
+            _moveComponent = moveComponent;
+            _inputManager = inputManager;
+        }
 
         public void OnFixedUpdate(float deltaTime)
         {
-            MoveCharacter(_moveComponent.GOTransform.position, _inputManager._moveDirection, deltaTime);
+            MoveCharacter(_moveComponent.GOTransform.position, _inputManager.MoveDirection, deltaTime);
         }
 
         public void MoveCharacter(Vector3 charPosition, float horizontalDirection, float timeDelta)
         {
-            bool canMove =  _bounds.IsFreeByLeft(charPosition) && horizontalDirection < 0 || _bounds.IsFreeByRight(charPosition) && horizontalDirection > 0;
+            bool canMove = _boundsChecker.IsFreeByLeft(charPosition) && horizontalDirection < 0 || _boundsChecker.IsFreeByRight(charPosition) && horizontalDirection > 0;
 
             if (canMove)
             {
-                 _moveComponent.MoveByRigidbody(new Vector2(horizontalDirection, 0) * timeDelta);
+                _moveComponent.MoveByRigidbody(new Vector2(horizontalDirection, 0) * timeDelta);
             }
 
         }

@@ -5,8 +5,8 @@ namespace ShootEmUp
     public sealed class EnemyAttackAgent : MonoBehaviour,
         Listeners.IStartListener
     {
-        [SerializeField] private WeaponComponent weaponComponent;
-        [SerializeField] private float _countdown;
+        [SerializeField] private WeaponComponent _weaponComponent;
+        [SerializeField] private float _attackDelay;
 
         private GameObject _target;
         private float _currentTime;
@@ -19,7 +19,7 @@ namespace ShootEmUp
 
         private void Fire()
         {
-            weaponComponent.ShootByTarget((Vector2)_target.transform.position);
+            _weaponComponent.ShootByTarget((Vector2)_target.transform.position);
         }
 
         public void DelayedAttack(float deltaTime)
@@ -28,14 +28,14 @@ namespace ShootEmUp
             if (_currentTime <= 0)
             {
                 Fire();
-                _currentTime += _countdown;
+                _currentTime += _attackDelay;
             }
         }
         
 
         public void OnStart()
         {
-            _currentTime = _countdown;
+            _currentTime = _attackDelay;
         }
 
     }

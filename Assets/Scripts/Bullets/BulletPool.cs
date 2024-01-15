@@ -1,27 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace ShootEmUp
 {
-    public sealed class BulletPool: MonoBehaviour,
+    public sealed class BulletPool : 
         Listeners.IInitListener
     {
-
-        [SerializeField]
+        private ObjectsSpawner _spawner;
         private GameManager _gameManager;
-
-        [SerializeField]
         private Transform _container;
-        [SerializeField]
         private Bullet _prefab;
 
-
-        [Header("Pool")]
-        [SerializeField]
-        private int _preloadCount = 50;
-
+        private int _preloadCount;
         private Pool<Bullet> _pool;
+
+        public BulletPool(ObjectsSpawner spawner, GameManager gameManager, Transform container, Bullet prefab, int preloadCount)
+        {
+            _spawner = spawner;
+            _gameManager = gameManager;
+            _container = container;
+            _prefab = prefab;
+            _preloadCount = preloadCount;
+        }
+
 
         public void OnInit()
         {
@@ -30,7 +32,7 @@ namespace ShootEmUp
 
         internal IEnumerable<Bullet> GetActiveBullet()
         {
-           return _pool.GetActiveItms();
+            return _pool.GetActiveItms();
 
         }
 
@@ -51,11 +53,11 @@ namespace ShootEmUp
 
         private Bullet SetUpListeners()
         {
-            var newBullet = Instantiate(_prefab, _container);
+            var newBullet = _spawner.InstantianeObject(_prefab.gameObject, _container);
 
-            _gameManager.AddListeners(newBullet.gameObject);
+            _gameManager.AddListeners(newBullet);
 
-            return newBullet;
+            return newBullet.GetComponent<Bullet>();
         }
 
         private void GetAction(Bullet bullet) => bullet.gameObject.SetActive(true);

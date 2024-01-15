@@ -3,15 +3,18 @@ using System;
 
 namespace ShootEmUp
 {
-    public sealed class PlayerShootController : MonoBehaviour, 
+    public sealed class PlayerShootController :
         Listeners.IStartListener,
         Listeners.IFinishListener
     {
-        [SerializeField]
         private WeaponComponent _playerWeapon;
-
-        [SerializeField]
         private InputManager _inputManager;
+
+        public PlayerShootController(WeaponComponent playerWeapon, InputManager inputManager)
+        {
+            _playerWeapon = playerWeapon;
+            _inputManager = inputManager;
+        }
 
         public void OnStart()
         {

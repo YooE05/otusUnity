@@ -1,4 +1,4 @@
-using System;
+using Zenject;
 using UnityEngine;
 
 namespace ShootEmUp
@@ -12,7 +12,6 @@ namespace ShootEmUp
         [SerializeField]
         private Transform _firePoint;
 
-        [SerializeField]
         private BulletSystem _bulletSystem;
         public BulletConfig Config
         {
@@ -22,7 +21,8 @@ namespace ShootEmUp
         [SerializeField]
         private BulletConfig _bulletConfig;
 
-        public void SetBulletSystem(BulletSystem bulletSystem)
+        [Inject]
+        public void Construct(BulletSystem bulletSystem)
         {
             _bulletSystem = bulletSystem;
         }

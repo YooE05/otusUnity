@@ -2,29 +2,30 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public class PauseUIController : MonoBehaviour,
+    public class PauseResumeUIController :
         Listeners.IInitListener,
         Listeners.IFinishListener
     {
-        [SerializeField]
-        private GameManager _gameManager;
 
-        [SerializeField]
-        private PauseUIView _view;
+        private GameManager _gameManager;
+        private PauseResumeUIView _view;
+
+        public PauseResumeUIController(GameManager gameManager, PauseResumeUIView view)
+        {
+            _gameManager = gameManager;
+            _view = view;
+            _view.AddButtonActions(OnPauseClick, OnResumeClick);
+        }
 
         public void OnInit()
         {
             _view.HideView();
         }
 
-        public void ShowPauseButton()
-        {
-            _view.SetResumeView();
-        }
-
         public void OnFinish()
         {
             _view.HideView();
+            _view.RemoveButtonActions();
         }
 
         public void OnPauseClick()

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Events;
 
 namespace ShootEmUp
 {
@@ -11,6 +12,18 @@ namespace ShootEmUp
 
         [SerializeField]
         private TextMeshProUGUI _txtView;
+
+        public void AddButtonActions(System.Action startAction)
+        {
+            UnityAction startUnityAction = new UnityAction(startAction);
+            _startButton.onClick.AddListener(startUnityAction);
+        }
+
+        public void RemoveButtonActions()
+        {
+            _startButton.onClick.RemoveAllListeners();
+        }
+
 
         public void ShowStartButton()
         {
@@ -23,7 +36,7 @@ namespace ShootEmUp
             _txtView.text = "Game Over";
         }
 
-        public void SetStartView()
+        public void HideStartButton()
         {
             _startButton.gameObject.SetActive(false);
         }

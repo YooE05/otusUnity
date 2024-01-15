@@ -10,9 +10,7 @@ namespace ShootEmUp
 
         public override void InstallBindings()
         {
-           // base.InstallBindings();
             Container.Bind<ILogger>().To<Logger>().AsSingle().NonLazy();
-
         }
 
 

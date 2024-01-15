@@ -3,10 +3,10 @@ using System;
 
 namespace ShootEmUp
 {
-    public sealed class InputManager : MonoBehaviour,
+    public sealed class InputManager :
         Listeners.IUpdateListener
     {
-        public float _moveDirection { get; private set; }
+        public float MoveDirection { get; private set; }
 
         public Action OnFireButtonPressed;
 
@@ -19,15 +19,15 @@ namespace ShootEmUp
 
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                _moveDirection = -1;
+                MoveDirection = -1;
             }
             else if (Input.GetKey(KeyCode.RightArrow))
             {
-                _moveDirection = 1;
+                MoveDirection = 1;
             }
             else
             {
-                _moveDirection = 0;
+                MoveDirection = 0;
             }
 
 

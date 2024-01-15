@@ -1,19 +1,22 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace ShootEmUp
 {
-    public sealed class BulletSystem : MonoBehaviour,
+    public sealed class BulletSystem : 
         Listeners.IFixUpdaterListener
     {
-        [SerializeField]
-        private LevelBounds _levelBounds;
-
-        [Header("Pool")]
-        [SerializeField]
+        private BoundsChecker _boundsChecker;
         private BulletPool _bulletPool;
+
         private readonly List<Bullet> _cache = new();
+
+        public BulletSystem(BoundsChecker boundsChecker, BulletPool bulletPool)
+        {
+            _boundsChecker = boundsChecker;
+            _bulletPool = bulletPool;
+        }
 
         public void OnFixedUpdate(float deltaTime)
         {
@@ -28,7 +31,7 @@ namespace ShootEmUp
             for (int i = 0, count = _cache.Count; i < count; i++)
             {
                 var bullet = _cache[i];
-                if (!_levelBounds.InBounds(bullet.transform.position))
+                if (!_boundsChecker.InBounds(bullet.transform.position))
                 {
                     _bulletPool.RemoveBullet(bullet);
                 }

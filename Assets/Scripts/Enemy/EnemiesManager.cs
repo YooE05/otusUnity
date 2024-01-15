@@ -3,21 +3,22 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class EnemiesManager : MonoBehaviour
+    public sealed class EnemiesManager
     {
         public Action OnEnemyDied;
 
-        [SerializeField]
-        private EnemyPositions _enemiePosHandler;
-
-        [SerializeField]
+        private EnemyPositionsManager _enemyPosManager;
         private EnemyPool _enemyPool;
-
-        [SerializeField]
         private BulletSystem _bulletSystem;
-
-        [SerializeField]
         private GameObject _enemyTarget;
+
+        public EnemiesManager(EnemyPositionsManager enemiePosManager, BulletSystem bulletSystem, EnemyPool enemyPool, GameObject enemyTarget)
+        {
+            _enemyPosManager = enemiePosManager;
+            _bulletSystem = bulletSystem;
+            _enemyPool = enemyPool;
+            _enemyTarget = enemyTarget;
+        }
 
         private void OnDestroyed(GameObject enemy)
         {
@@ -31,12 +32,12 @@ namespace ShootEmUp
         {
             var enemy = _enemyPool.SpawnEnemy();
 
-            var spawnPosition = _enemiePosHandler.GetRandSpawnPos();
+            var spawnPosition = _enemyPosManager.GetRandSpawnPos();
             enemy.transform.position = spawnPosition.position;
-            var attackPosition = _enemiePosHandler.GetRandAtkPos().position;
+            var attackPosition = _enemyPosManager.GetRandAtkPos().position;
             enemy.GetComponent<EnemyMoveAgent>().SetDestination(attackPosition);
             enemy.GetComponent<EnemyAttackAgent>().SetTarget(_enemyTarget);
-            enemy.GetComponent<WeaponComponent>().SetBulletSystem(_bulletSystem);
+            enemy.GetComponent<WeaponComponent>().Construct(_bulletSystem);
             enemy.GetComponent<HitPointsComponent>().OnHitpointsEmpty += this.OnDestroyed;
         }
     }
