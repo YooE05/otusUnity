@@ -2,7 +2,7 @@
 
 namespace ShootEmUp
 {
-    abstract class Countdown : IDisposable
+    public abstract class Countdown
     {
         public Action<int> OnValueChanged;
         public Action<Countdown> OnCountdownEnded;
@@ -49,12 +49,6 @@ namespace ShootEmUp
                 OnValueChanged?.Invoke(countOfSteps);
                 _isCounting = true;
             }
-
-        }
-
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
         }
     }
 }

@@ -6,9 +6,8 @@ namespace ShootEmUp
     public sealed class InputManager :
         Listeners.IUpdateListener
     {
-        public float MoveDirection { get; private set; }
-
         public Action OnFireButtonPressed;
+        public float MoveDirection { get; private set; }
 
         public void OnUpdate(float deltaTime)
         {
@@ -29,9 +28,6 @@ namespace ShootEmUp
             {
                 MoveDirection = 0;
             }
-
-
         }
-
     }
 }

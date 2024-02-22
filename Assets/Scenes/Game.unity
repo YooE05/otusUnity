@@ -154,50 +154,6 @@ Transform:
   m_Father: {fileID: 9048567252472711235}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &109607709
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 109607711}
-  - component: {fileID: 109607710}
-  m_Layer: 0
-  m_Name: ObjectsSpawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &109607710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 109607709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbd4eb5363335cf43a596829c3dc96f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &109607711
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 109607709}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5557811, y: 1.7320561, z: 10.707723}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3951702117947426122}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &178513671
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,7 +512,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da92c84c3bc557d478ab113a4d469cd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawner: {fileID: 109607710}
   _levelBounds: {fileID: 2572952653776768186}
   _backgroundSettings: {fileID: 4852396043583267082}
   _startGameConfig: {fileID: 11400000, guid: ce4eb7c44217f2341b89651ddf98018f, type: 2}
@@ -753,7 +708,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce88fee201654f6e8064002ed15de594, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rb: {fileID: 7228290957959305771}
+  _rigidbody: {fileID: 7228290957959305771}
   _speed: 5
 --- !u!1 &924248677
 GameObject:
@@ -889,7 +844,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startButton: {fileID: 1779270656}
-  _txtView: {fileID: 1559581061}
+  _textView: {fileID: 1559581061}
 --- !u!1 &1049219807
 GameObject:
   m_ObjectHideFlags: 0
@@ -1171,7 +1126,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3951702117947426122}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1519950694
 GameObject:
@@ -1382,7 +1337,7 @@ GameObject:
   - component: {fileID: 1559581062}
   - component: {fileID: 1559581061}
   m_Layer: 5
-  m_Name: CountdownTxt
+  m_Name: CountdownText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2332,7 +2287,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 633769544}
-  - {fileID: 109607711}
   - {fileID: 1463219704}
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -2439,8 +2393,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce164c84a74a425f8d2e82764aef9e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firePoint: {fileID: 1873194248}
-  _bulletConfig: {fileID: 11400000, guid: 7138ae5d32d814e0ca50c616c65ea105, type: 2}
+  <FirePoint>k__BackingField: {fileID: 1873194248}
+  <BulletConfig>k__BackingField: {fileID: 11400000, guid: 7138ae5d32d814e0ca50c616c65ea105,
+    type: 2}
 --- !u!1 &4788406047096451828
 GameObject:
   m_ObjectHideFlags: 0

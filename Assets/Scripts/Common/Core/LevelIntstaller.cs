@@ -1,19 +1,17 @@
 ﻿using Zenject;
 using UnityEngine;
-using System;
 
 namespace ShootEmUp
 {
-    class LevelIntstaller : MonoInstaller
+    public sealed class LevelIntstaller : MonoInstaller
     {
-        [SerializeField] private ObjectsSpawner _spawner;
         [SerializeField] private LevelBounds _levelBounds;
         [SerializeField] private BackgroundSettings _backgroundSettings;
         [SerializeField] private StartGameConfig _startGameConfig;
 
         [Header("Bullets")]
         [SerializeField] private Transform _bulletPoolRoot;
-        [SerializeField] private Bullet _bulletPrefab;
+        [SerializeField] private BulletView _bulletPrefab;
         [SerializeField] private int _bulletsPreloadCount;
 
         [Header("Player")]
@@ -33,23 +31,20 @@ namespace ShootEmUp
         [SerializeField] private StartFinishUIView _startFinishView;
         [SerializeField] private PauseResumeUIView _pauseResumeView;
 
-
         public override void InstallBindings()
         {
             Container.Bind<BoundsChecker>().AsSingle().WithArguments(_levelBounds);
             Container.BindInterfacesAndSelfTo<BackgroundMover>().AsSingle().WithArguments(_backgroundSettings).NonLazy();
-            Container.Bind<ObjectsSpawner>().FromInstance(_spawner).AsSingle();
 
             Container.BindInterfacesAndSelfTo<InputManager>().AsSingle();
-            Container.BindInterfacesAndSelfTo<GameManager>().AsSingle().WithArguments(gameObject);
-
+            Container.BindInterfacesAndSelfTo<GameManager>().AsSingle();
 
             BulletsSystemBind();
 
             PLayerSystemBind();
             EnemySystemBind();
 
-            UI();
+            UIBind();
         }
 
         private void BulletsSystemBind()
@@ -57,12 +52,15 @@ namespace ShootEmUp
             Container.BindInterfacesAndSelfTo<BulletPool>().AsSingle().WithArguments(_bulletPoolRoot, _bulletPrefab, _bulletsPreloadCount);
             Container.BindInterfacesAndSelfTo<BulletSystem>().AsSingle().NonLazy();
         }
+
         private void PLayerSystemBind()
         {
             Container.BindInterfacesAndSelfTo<PlayerMoveController>().AsSingle().WithArguments(_moveComponent).NonLazy();
-            Container.BindInterfacesAndSelfTo<PlayerShootController>().AsSingle().WithArguments(_weaponComponent).NonLazy();
+            Container.Bind<WeaponController>().AsSingle().WithArguments(_weaponComponent).NonLazy();
+            Container.BindInterfacesAndSelfTo<PlayerShootController>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<PlayerDeathObserver>().AsSingle().WithArguments(_playerHP).NonLazy();
         }
+
         private void EnemySystemBind()
         {
             Container.Bind<EnemySystemConfig>().FromInstance(_enemySystemConfig).AsSingle();
@@ -72,7 +70,8 @@ namespace ShootEmUp
             Container.Bind<EnemiesManager>().AsSingle().WithArguments(_enemyTarget).NonLazy();
             Container.BindInterfacesAndSelfTo<EnemySpawnController>().AsSingle().NonLazy();
         }
-        private void UI()
+
+        private void UIBind()
         {
             Container.BindInterfacesAndSelfTo<StartFinishUIController>().AsSingle().WithArguments(_startFinishView, _startGameConfig).NonLazy();
             Container.BindInterfacesAndSelfTo<PauseResumeUIController>().AsSingle().WithArguments(_pauseResumeView).NonLazy();

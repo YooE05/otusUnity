@@ -1,17 +1,24 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ShootEmUp
 {
-    class EnemyMoveAttackController : MonoBehaviour,
+    internal sealed class EnemyMoveAttackController : 
         Listeners.IFixUpdaterListener
     {
-        [SerializeField] private EnemyAttackAgent _attackAgent;
-        [SerializeField] private EnemyMoveAgent _moveAgent;
+        private readonly EnemyAttackAgent _attackAgent;
+        private readonly EnemyMoveAgent _moveAgent;
+        private readonly GameObject _enemyGO;
+
+        public EnemyMoveAttackController(GameObject enemyGO, EnemyMoveAgent moveAgent, EnemyAttackAgent attackAgent)
+        {
+            _enemyGO = enemyGO;
+            _moveAgent = moveAgent;
+            _attackAgent = attackAgent;
+        }
 
         public void OnFixedUpdate(float deltaTime)
         {
-            if (_moveAgent.IsReached && gameObject.activeInHierarchy)
+            if (_moveAgent.IsReached && _enemyGO.activeInHierarchy)
             {
                 _attackAgent.DelayedAttack(deltaTime);
             }

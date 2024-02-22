@@ -1,15 +1,12 @@
-﻿using UnityEngine;
-
-
-namespace ShootEmUp
+﻿namespace ShootEmUp
 {
-    public class StartFinishUIController :
+    public sealed class StartFinishUIController :
         Listeners.IInitListener,
         Listeners.IFinishListener
     {
-        private GameManager _gameManager;
-        private StartFinishUIView _view;
-        private StartGameConfig _startGameConfig;
+        private readonly GameManager _gameManager;
+        private readonly StartFinishUIView _view;
+        private readonly StartGameConfig _startGameConfig;
 
         private PrestartUpdatebleCountdown _countdown = new();
 
@@ -55,7 +52,6 @@ namespace ShootEmUp
             _countdown.OnValueChanged -= ChangeTimerText;
             _countdown.OnCountdownEnded -= RemoveCountdownAndStart;
             _gameManager.RemoveListener(_countdown);
-            _countdown.Dispose();
             StartGame();
         }
 

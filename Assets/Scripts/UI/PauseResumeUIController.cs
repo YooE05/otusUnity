@@ -1,14 +1,11 @@
-using UnityEngine;
-
 namespace ShootEmUp
 {
-    public class PauseResumeUIController :
+    public sealed class PauseResumeUIController :
         Listeners.IInitListener,
         Listeners.IFinishListener
     {
-
-        private GameManager _gameManager;
-        private PauseResumeUIView _view;
+        private readonly GameManager _gameManager;
+        private readonly PauseResumeUIView _view;
 
         public PauseResumeUIController(GameManager gameManager, PauseResumeUIView view)
         {
@@ -32,7 +29,6 @@ namespace ShootEmUp
         {
             _view.SetPauseView();
             _gameManager.OnPause();
-
         }
 
         public void OnResumeClick()

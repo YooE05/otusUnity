@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ShootEmUp
 {
@@ -7,8 +6,7 @@ namespace ShootEmUp
         Listeners.IInitListener,
         Listeners.IFixUpdaterListener
     {
-
-        private BackgroundSettings _backParams;
+        private readonly BackgroundSettings _backParams;
         private Vector2 _position;
 
         public BackgroundMover(BackgroundSettings backParams)
@@ -20,7 +18,6 @@ namespace ShootEmUp
         {
             _position = new Vector2(_backParams.BackTransform.position.x, _backParams.BackTransform.position.z);
         }
-
 
         public void OnFixedUpdate(float deltaTime)
         {

@@ -5,14 +5,11 @@ using UnityEngine.UI;
 
 namespace ShootEmUp
 {
-    public class PauseResumeUIView : MonoBehaviour
+    public sealed class PauseResumeUIView : MonoBehaviour
     {
-        [SerializeField]
-        private Button _pauseButton;
-        [SerializeField]
-        private Button _resumeButton;
-        [SerializeField]
-        private Button _startButton;
+        [SerializeField] private Button _pauseButton;
+        [SerializeField] private Button _resumeButton;
+        [SerializeField] private Button _startButton;
 
         public void AddButtonActions(Action pauseAction, Action resumeAction)
         {
@@ -24,6 +21,7 @@ namespace ShootEmUp
 
             _startButton.onClick.AddListener(SetResumeView);
         }
+        
         public void RemoveButtonActions()
         {
             _pauseButton.onClick.RemoveAllListeners();
@@ -31,12 +29,12 @@ namespace ShootEmUp
             _startButton.onClick.RemoveAllListeners();
         }
 
-
         public void SetPauseView()
         {
             _pauseButton.gameObject.SetActive(false);
             _resumeButton.gameObject.SetActive(true);
         }
+        
         public void SetResumeView()
         {
             _pauseButton.gameObject.SetActive(true);

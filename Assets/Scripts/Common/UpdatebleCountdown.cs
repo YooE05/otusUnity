@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using UnityEngine;
-using System;
-
-namespace ShootEmUp
+﻿namespace ShootEmUp
 {
-    class UpdatebleCountdown : Countdown, Listeners.IUpdateListener
+    public sealed class UpdatebleCountdown : Countdown, Listeners.IUpdateListener
     {
         public void OnUpdate(float deltaTime)
         {
@@ -12,10 +8,9 @@ namespace ShootEmUp
 
             UpdateTimer();
         }
-
     }
 
-    class PrestartUpdatebleCountdown : Countdown, Listeners.IPrestartUpdateListener
+    public sealed class PrestartUpdatebleCountdown : Countdown, Listeners.IPrestartUpdateListener
     {
         public void OnPrestartUpdate(float deltaTime)
         {
@@ -23,6 +18,5 @@ namespace ShootEmUp
 
             UpdateTimer();
         }
-
     }
 }

@@ -5,13 +5,11 @@ using UnityEngine.Events;
 
 namespace ShootEmUp
 {
-    public class StartFinishUIView : MonoBehaviour
+    public sealed class StartFinishUIView : MonoBehaviour
     {
-        [SerializeField]
-        private Button _startButton;
+        [SerializeField] private Button _startButton;
 
-        [SerializeField]
-        private TextMeshProUGUI _txtView;
+        [SerializeField] private TextMeshProUGUI _textView;
 
         public void AddButtonActions(System.Action startAction)
         {
@@ -24,16 +22,15 @@ namespace ShootEmUp
             _startButton.onClick.RemoveAllListeners();
         }
 
-
         public void ShowStartButton()
         {
             _startButton.gameObject.SetActive(true);
-            _txtView.text = "";
+            _textView.text = "";
         }
 
         internal void ShowEndText()
         {
-            _txtView.text = "Game Over";
+            _textView.text = "Game Over";
         }
 
         public void HideStartButton()
@@ -43,7 +40,7 @@ namespace ShootEmUp
 
         public void SetCountdownText(string txt)
         {
-            _txtView.text = txt;
+            _textView.text = txt;
         }
     }
 }

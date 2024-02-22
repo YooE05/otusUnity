@@ -2,33 +2,32 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public class PlayerDeathObserver :
+    public sealed class PlayerDeathObserver :
         Listeners.IStartListener,
         Listeners.IFinishListener
     {
-        private HitPointsComponent _playerHP;
-        private GameManager _gameManager;
+        private readonly HitPointsComponent _playerHitPoints;
+        private readonly GameManager _gameManager;
 
         public PlayerDeathObserver(GameManager gameManager, HitPointsComponent playerHP)
         {
             _gameManager = gameManager;
-            _playerHP = playerHP;
+            _playerHitPoints = playerHP;
         }
 
         public void OnStart()
         {
-            _playerHP.OnHitpointsEmpty += FinishGame;
+            _playerHitPoints.OnHitpointsEmpty += FinishGame;
         }
+
         public void OnFinish()
         {
-           _playerHP.OnHitpointsEmpty -= FinishGame;
+           _playerHitPoints.OnHitpointsEmpty -= FinishGame;
         }
-        
+
         private void FinishGame(GameObject _)
         {
             _gameManager.OnFinish();
         }
-
-
     }
 }

@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 namespace ShootEmUp
 {
-
     [CreateAssetMenu(
        fileName = "EnemySystemConfig",
        menuName = "Configs/New EnemySystemConfig"

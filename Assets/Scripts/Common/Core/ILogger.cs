@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 namespace ShootEmUp
@@ -12,13 +11,10 @@ namespace ShootEmUp
         public Logger()
         {
           //  Debug.Log("LogVar");
-        }
-        
+        }  
         public void Log(string message)
         {
             Debug.Log(message);
         }
-
     }
-
 }

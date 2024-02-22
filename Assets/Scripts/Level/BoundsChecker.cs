@@ -4,7 +4,8 @@ namespace ShootEmUp
 {
     public sealed class BoundsChecker
     {
-        private LevelBounds _levelBounds;
+        private readonly LevelBounds _levelBounds;
+        
         public BoundsChecker(LevelBounds levelBounds)
         {
             _levelBounds = levelBounds;
@@ -19,11 +20,13 @@ namespace ShootEmUp
                    && positionY > _levelBounds.DownBorder.position.y
                    && positionY < _levelBounds.TopBorder.position.y;
         }
+        
         public bool IsFreeByLeft(Vector2 position)
         {
             var positionX = position.x;
             return positionX > _levelBounds.LeftBorder.position.x;
         }
+        
         public bool IsFreeByRight(Vector2 position)
         {
             var positionX = position.x;

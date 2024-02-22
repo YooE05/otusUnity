@@ -1,15 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 namespace ShootEmUp
 {
-    public class PlayerMoveController :
+    public sealed class PlayerMoveController :
         Listeners.IFixUpdaterListener,
         Listeners.IFinishListener
     {
-        private BoundsChecker _boundsChecker;
-        private MoveComponent _moveComponent;
-        private InputManager _inputManager;
+        private readonly BoundsChecker _boundsChecker;
+        private readonly MoveComponent _moveComponent;
+        private readonly InputManager _inputManager;
 
         public PlayerMoveController(BoundsChecker boundsChecker, MoveComponent moveComponent, InputManager inputManager)
         {
@@ -23,7 +22,12 @@ namespace ShootEmUp
             MoveCharacter(_moveComponent.GOTransform.position, _inputManager.MoveDirection, deltaTime);
         }
 
-        public void MoveCharacter(Vector3 charPosition, float horizontalDirection, float timeDelta)
+        public void OnFinish()
+        {
+            _moveComponent.gameObject.SetActive(false);
+        }
+
+        private void MoveCharacter(Vector3 charPosition, float horizontalDirection, float timeDelta)
         {
             bool canMove = _boundsChecker.IsFreeByLeft(charPosition) && horizontalDirection < 0 || _boundsChecker.IsFreeByRight(charPosition) && horizontalDirection > 0;
 
@@ -31,14 +35,6 @@ namespace ShootEmUp
             {
                 _moveComponent.MoveByRigidbody(new Vector2(horizontalDirection, 0) * timeDelta);
             }
-
         }
-
-        public void OnFinish()
-        {
-            _moveComponent.gameObject.SetActive(false);
-        }
-
     }
-
 }

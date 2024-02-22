@@ -1,15 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace ShootEmUp
 {
     public enum GameState
     {
-        None, Initialized, Playing, Paused, Finished
+        None = 0,
+        Initialized = 1,
+        Playing = 2,
+        Paused = 3,
+        Finished = 4
     }
 
-    public sealed class GameManager : 
+    public sealed class GameManager :
         IInitializable,
         ITickable,
         IFixedTickable
@@ -22,9 +27,9 @@ namespace ShootEmUp
         private List<Listeners.IFixUpdaterListener> fixUpdateListeners = new();
         private List<Listeners.IPrestartUpdateListener> prestartUpdatelisteners = new();
 
-        public GameManager( GameObject anySceneGO)
+        public GameManager()
         {
-            AddListenersFromScene(anySceneGO);
+            AddListenersFromScene(SceneManager.GetActiveScene().GetRootGameObjects());
         }
 
         [Inject]
@@ -36,14 +41,15 @@ namespace ShootEmUp
             }
         }
 
-        
-        internal void AddListenersFromScene(GameObject gameObject)
+        #region GameListeners Collecting
+        internal void AddListenersFromScene(GameObject[] gameObjects)
         {
-            foreach (var root in gameObject.scene.GetRootGameObjects())
+            foreach (var root in gameObjects)
             {
                 AddListeners(root);
             }
         }
+
         public void AddListeners(GameObject root)
         {
             var listeners = root.GetComponentsInChildren<Listeners.IGameListener>();
@@ -53,6 +59,7 @@ namespace ShootEmUp
                 AddListener(listeners[i]);
             }
         }
+
         public void AddListener(Listeners.IGameListener newListener)
         {
             listeners.Add(newListener);
@@ -70,6 +77,7 @@ namespace ShootEmUp
                 prestartUpdatelisteners.Add(lateUpdatelistener);
             }
         }
+
         public void RemoveListener(Listeners.IGameListener removingListener)
         {
             listeners.Remove(removingListener);
@@ -87,8 +95,10 @@ namespace ShootEmUp
                 prestartUpdatelisteners.Add(lateUpdatelistener);
             }
         }
+        #endregion
 
-       internal GameState GetCurrentState()
+        #region GameStates Depending Actions
+        internal GameState GetCurrentState()
         {
             return _currentGameState;
         }
@@ -99,7 +109,6 @@ namespace ShootEmUp
             {
                 return;
             }
-
             for (int i = 0; i < listeners.Count; i++)
             {
                 if (listeners[i] is Listeners.IStartListener startListener)
@@ -109,13 +118,13 @@ namespace ShootEmUp
             }
             _currentGameState = GameState.Playing;
         }
+
         public void OnFinish()
         {
             if (_currentGameState != GameState.Playing)
             {
                 return;
             }
-
             for (int i = 0; i < listeners.Count; i++)
             {
                 if (listeners[i] is Listeners.IFinishListener finishListener)
@@ -124,8 +133,8 @@ namespace ShootEmUp
                 }
             }
             _currentGameState = GameState.Finished;
-
         }
+
         public void OnPause()
         {
             if (_currentGameState == GameState.Playing || _currentGameState == GameState.Initialized)
@@ -142,13 +151,13 @@ namespace ShootEmUp
                 _currentGameState = GameState.Paused;
             }
         }
+
         public void OnResume()
         {
             if (_currentGameState != GameState.Paused)
             {
                 return;
             }
-
             if (_lastGameState == GameState.Initialized)
             {
                 _currentGameState = GameState.Initialized;
@@ -165,8 +174,9 @@ namespace ShootEmUp
                 _currentGameState = GameState.Playing;
             }
         }
+        #endregion
 
-
+        #region Zenject Interfaces Implementation
         public void Initialize()
         {
             for (int i = 0; i < listeners.Count; i++)
@@ -184,8 +194,6 @@ namespace ShootEmUp
             {
                 PrestartUpdate();
             }
-
-
             if (_currentGameState != GameState.Playing)
             {
                 return;
@@ -206,6 +214,8 @@ namespace ShootEmUp
                 fixUpdateListeners[i].OnFixedUpdate(Time.fixedDeltaTime);
             }
         }
+        #endregion
+       
         private void PrestartUpdate()
         {
             for (int i = 0; i < prestartUpdatelisteners.Count; i++)

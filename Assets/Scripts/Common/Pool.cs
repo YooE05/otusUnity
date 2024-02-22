@@ -2,20 +2,18 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class Pool<T>
 {
-
     private Queue<T> _pool = new Queue<T>();
-    private readonly List<T> _activeItms = new();
+    private readonly List<T> _activeItems = new();
 
-    private readonly Func<T> _preloadFunc;
+    private readonly Func<T> _preloadFunction;
     private readonly Action<T> _getAction;
     private readonly Action<T> _returnAction;
 
     public Pool(Func<T> preloadFunc, Action<T> getAction, Action<T> returnAction, int preloadCount)
     {
-        _preloadFunc = preloadFunc;
+        _preloadFunction = preloadFunc;
         _getAction = getAction;
         _returnAction = returnAction;
 
@@ -29,15 +27,13 @@ public class Pool<T>
         {
             Return(preloadFunc());
         }
-
-
     }
 
     public T Get()
     {
-        T item = _pool.Count > 0 ? _pool.Dequeue() : _preloadFunc();
+        T item = _pool.Count > 0 ? _pool.Dequeue() : _preloadFunction();
         _getAction(item);
-        _activeItms.Add(item);
+        _activeItems.Add(item);
 
         return item;
     }
@@ -46,12 +42,12 @@ public class Pool<T>
     {
         _returnAction(item);
         _pool.Enqueue(item);
-        _activeItms.Remove(item);
+        _activeItems.Remove(item);
     }
 
     public void ReturnAll()
     {
-        foreach (T item in _activeItms.ToArray())
+        foreach (T item in _activeItems.ToArray())
         {
             Return(item);
         }
@@ -59,6 +55,6 @@ public class Pool<T>
 
     public List<T> GetActiveItms()
     {
-        return _activeItms;
+        return _activeItems;
     }
 }

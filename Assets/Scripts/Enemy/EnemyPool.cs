@@ -1,33 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
 namespace ShootEmUp
 {
     public sealed class EnemyPool : 
         Listeners.IInitListener
     {
-        private ObjectsSpawner _spawner;
-        private GameManager _gameManager;
-        private Transform _container;
-        private GameObject _prefab;
-
-        private int _preloadCount;
+        private readonly GameManager _gameManager;
+        private readonly Transform _container;
+        private readonly GameObject _prefab;
+        private readonly int _preloadCount;
 
         private Pool<GameObject> _pool;
 
-        public EnemyPool(ObjectsSpawner spawner, GameManager gameManager, Transform container, GameObject prefab, EnemySystemConfig config)
+        public EnemyPool(GameManager gameManager, Transform container, GameObject prefab, EnemySystemConfig config)
         {
-            _spawner = spawner;
             _gameManager = gameManager;
             _container = container;
             _prefab = prefab;
 
             _preloadCount = config.PreloadInstanceCount;
         }
-
-        
-
 
         public void OnInit()
         {
@@ -50,17 +43,18 @@ namespace ShootEmUp
         }
 
         private GameObject Preload() => SetUpListeners();
+        
         private GameObject SetUpListeners()
         {
-            var newEnemy = _spawner.InstantianeObject(_prefab, _container);
+            var newEnemy = Object.Instantiate(_prefab, _container);
 
             _gameManager.AddListeners(newEnemy);
 
             return newEnemy;
         }
+        
         private void GetAction(GameObject enemy) => enemy.SetActive(true);
-
+        
         private void ReturnAction(GameObject enemy) => enemy.SetActive(false);
-
     }
 }

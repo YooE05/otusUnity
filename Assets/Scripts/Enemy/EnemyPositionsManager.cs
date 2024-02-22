@@ -4,24 +4,24 @@ namespace ShootEmUp
 {
     public sealed class EnemyPositionsManager
     {
-        private EnemyPositions _enemyPositions;
+        private readonly EnemyPositions _enemyPositions;
 
         public EnemyPositionsManager(EnemyPositions enemyPositions)
         {
             _enemyPositions = enemyPositions;
         }
 
-        public Transform GetRandAtkPos()
+        public Transform GetRandomAttackPosition()
         {
             return RandomTransform(_enemyPositions.AttackPositions);
         }
 
-        public Transform GetRandSpawnPos()
+        public Transform GetRandomSpawnPosition()
         {
             return RandomTransform(_enemyPositions.SpawnPositions);
         }
 
-        private Transform RandomTransform(Transform[] transforms)
+        private static Transform RandomTransform(Transform[] transforms)
         {
             var index = Random.Range(0, transforms.Length);
             return transforms[index];

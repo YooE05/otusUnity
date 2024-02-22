@@ -1,6 +1,4 @@
-using Zenject;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace ShootEmUp
 {
@@ -9,9 +7,9 @@ namespace ShootEmUp
         Listeners.IFinishListener
     {
 
-        private GameManager _gameManager;
-        private EnemiesManager _enemiesManager;
-        private EnemySystemConfig _config;
+        private readonly GameManager _gameManager;
+        private readonly EnemiesManager _enemiesManager;
+        private readonly EnemySystemConfig _config;
 
         private UpdatebleCountdown _initSpawnCountdown = new UpdatebleCountdown();
         private List<UpdatebleCountdown> _playSpawnCountdowns = new();
@@ -22,7 +20,6 @@ namespace ShootEmUp
             _enemiesManager = enemiesManager;
             _config = config;
         }
-
 
         public void OnStart()
         {
@@ -45,31 +42,30 @@ namespace ShootEmUp
         {
             _initSpawnCountdown.OnValueChanged -= InitEnemy;
             _initSpawnCountdown.OnCountdownEnded -= RemoveCountdownListener;
-            _initSpawnCountdown.Dispose();
         }
 
         private void SpawnNewEnemy()
         {
             var spawnCountdown = new UpdatebleCountdown();
-            spawnCountdown.OnCountdownEnded += InitEnemyAndDespose;
+            spawnCountdown.OnCountdownEnded += InitEnemy;
 
             _gameManager.AddListener(spawnCountdown);
             _playSpawnCountdowns.Add(spawnCountdown);
 
             spawnCountdown.StartTimer(1, _config.NewSpawnDelay);
         }
+       
         private void InitEnemy(int _)
         {
             _enemiesManager.InitNewEnemy();
         }
-        private void InitEnemyAndDespose(Countdown countdown)
+        
+        private void InitEnemy(Countdown countdown)
         {
-            countdown.OnCountdownEnded -= InitEnemyAndDespose;
+            countdown.OnCountdownEnded -= InitEnemy;
             _playSpawnCountdowns.Remove((UpdatebleCountdown)countdown);
             _gameManager.RemoveListener((UpdatebleCountdown)countdown);
-            countdown.Dispose();
             _enemiesManager.InitNewEnemy();
         }
-
     }
 }

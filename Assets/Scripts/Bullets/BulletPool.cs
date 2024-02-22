@@ -1,67 +1,64 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
 namespace ShootEmUp
 {
-    public sealed class BulletPool : 
+    public sealed class BulletPool :
         Listeners.IInitListener
     {
-        private ObjectsSpawner _spawner;
-        private GameManager _gameManager;
-        private Transform _container;
-        private Bullet _prefab;
+        private readonly GameManager _gameManager;
+        private readonly Transform _container;
+        private readonly BulletView _prefab;
+        private readonly int _preloadCount;
 
-        private int _preloadCount;
-        private Pool<Bullet> _pool;
+        private Pool<BulletBehaviourController> _pool;
 
-        public BulletPool(ObjectsSpawner spawner, GameManager gameManager, Transform container, Bullet prefab, int preloadCount)
+        public BulletPool(GameManager gameManager, Transform container, BulletView prefab, int preloadCount)
         {
-            _spawner = spawner;
             _gameManager = gameManager;
             _container = container;
             _prefab = prefab;
             _preloadCount = preloadCount;
         }
 
-
         public void OnInit()
         {
-            _pool = new Pool<Bullet>(Preload, GetAction, ReturnAction, _preloadCount);
+            _pool = new Pool<BulletBehaviourController>(Preload, GetAction, ReturnAction, _preloadCount);
         }
 
-        internal IEnumerable<Bullet> GetActiveBullet()
+        private BulletBehaviourController Preload() => SetUpListeners();
+
+        internal IEnumerable<BulletBehaviourController> GetAllActiveBullets()
         {
             return _pool.GetActiveItms();
-
         }
 
-        public void RemoveBullet(Bullet bullet)
-        {
-            bullet.OnCollisionEntered -= RemoveBullet;
-            _pool.Return(bullet);
-        }
-
-        private Bullet Preload() => SetUpListeners();
-
-        internal Bullet Get()
+        internal BulletBehaviourController Get()
         {
             var bullet = _pool.Get();
-            bullet.OnCollisionEntered += RemoveBullet;
+            bullet.AddCollisionListener(RemoveBullet);
             return bullet;
         }
 
-        private Bullet SetUpListeners()
+        private void GetAction(BulletBehaviourController bullet) => bullet.EnableView();
+
+        public void RemoveBullet(BulletBehaviourController bullet)
         {
-            var newBullet = _spawner.InstantianeObject(_prefab.gameObject, _container);
-
-            _gameManager.AddListeners(newBullet);
-
-            return newBullet.GetComponent<Bullet>();
+            bullet.RemoveCollisionListener(RemoveBullet);
+            _pool.Return(bullet);
         }
 
-        private void GetAction(Bullet bullet) => bullet.gameObject.SetActive(true);
+        private void ReturnAction(BulletBehaviourController bullet) => bullet.DisableView();
 
-        private void ReturnAction(Bullet bullet) => bullet.gameObject.SetActive(false);
+        private BulletBehaviourController SetUpListeners()
+        {
+            var newBulletView = Object.Instantiate(_prefab.gameObject, _container);
+            var newBulletBehavior = new BulletBehaviourController(newBulletView.GetComponent<BulletView>());
+
+            _gameManager.AddListener(newBulletBehavior);
+            _gameManager.AddListeners(newBulletView);
+
+            return newBulletBehavior;
+        }
     }
 }
